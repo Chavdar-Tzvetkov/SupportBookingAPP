@@ -1,0 +1,31 @@
+@model SupportBookingAPP.Models.Booking
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create Booking</h1>
+
+<form asp-action="Create">
+    <div class="form-group">
+        <label asp-for="EngineerId" class="control-label"></label>
+        <select asp-for="EngineerId" class="form-control" asp-items="ViewBag.EngineerId"></select>
+    </div>
+    <div class="form-group">
+        <label asp-for="SlotStart" class="control-label"></label>
+        <input asp-for="SlotStart" class="form-control" type="datetime-local" />
+    </div>
+    <div class="form-group">
+        <label asp-for="SlotEnd" class="control-label"></label>
+        <input asp-for="SlotEnd" class="form-control" type="datetime-local" />
+    </div>
+    <div class="form-group">
+        <label asp-for="IssueDescription" class="control-label"></label>
+        <textarea asp-for="IssueDescription" class="form-control"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Book Slot</button>
+</form>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
