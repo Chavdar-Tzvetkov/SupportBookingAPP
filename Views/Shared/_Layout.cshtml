@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@using SupportBookingAPP.Models
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -28,13 +33,21 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-controller="Bookings" asp-action="Index">Bookings</a>
                         </li>
-                    @*     <li class="nav-item">
-                            <a class="nav-link text-danger" asp-controller="Error" asp-action="Error500">Test 500</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-warning" asp-controller="Error" asp-action="HttpStatusCodeHandler" asp-route-statusCode="404">Test 404</a>
-                        </li> *@
 
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            var user = await UserManager.GetUserAsync(User);
+                            if (user != null)
+                            {
+                                var roles = await UserManager.GetRolesAsync(user);
+                                if (roles.Contains("Admin"))
+                                {
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="Admin" asp-controller="Home" asp-action="Index">Admin Dashboard</a>
+                                    </li>
+                                }
+                            }
+                        }
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
@@ -52,6 +65,7 @@
             &copy; 2025 - SupportBookingAPP - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

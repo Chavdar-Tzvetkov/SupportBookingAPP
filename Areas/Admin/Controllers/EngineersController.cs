@@ -1,10 +1,13 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SupportBookingAPP.Data;
 using SupportBookingAPP.Models;
 
-namespace SupportBookingAPP.Controllers
+namespace SupportBookingAPP.Areas.Admin.Controllers
 {
+    [Area("Admin")]
+    [Authorize(Roles = "Administrator")]
     public class EngineersController : Controller
     {
         private readonly ApplicationDbContext _context;

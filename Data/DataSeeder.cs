@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 using SupportBookingAPP.Models;
 
 namespace SupportBookingAPP.Data
@@ -13,11 +14,10 @@ namespace SupportBookingAPP.Data
             var context = services.GetRequiredService<ApplicationDbContext>();
             var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
             var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+            var adminSettings = services.GetRequiredService<IOptions<AdminUserSettings>>().Value;
 
-            //context.Database.Migrate();
-
-            // Seed roles
-            string[] roles = { "Admin", "User" };
+            // Create roles if they don't exist
+            string[] roles = { "Administrator", "User" };
             foreach (var role in roles)
             {
                 if (!await roleManager.RoleExistsAsync(role))
@@ -26,7 +26,33 @@ namespace SupportBookingAPP.Data
                 }
             }
 
-            // Seed engineers
+            // Seed Admin User from secrets
+            var adminEmail = adminSettings.Email;
+            var adminPassword = adminSettings.Password;
+            var adminRole = string.IsNullOrEmpty(adminSettings.Role) ? "Administrator" : adminSettings.Role;
+
+            var adminUser = await userManager.FindByEmailAsync(adminEmail);
+            if (adminUser == null)
+            {
+                var newAdmin = new ApplicationUser
+                {
+                    UserName = adminEmail,
+                    Email = adminEmail,
+                    EmailConfirmed = true
+                };
+
+                var result = await userManager.CreateAsync(newAdmin, adminPassword);
+                if (result.Succeeded)
+                {
+                    await userManager.AddToRoleAsync(newAdmin, adminRole);
+                }
+                else
+                {
+                    throw new Exception("Failed to create Admin user: " + string.Join(", ", result.Errors.Select(e => e.Description)));
+                }
+            }
+
+            // Seed Engineers
             if (!context.Engineers.Any())
             {
                 var engineers = new List<Engineer>
@@ -40,56 +66,58 @@ namespace SupportBookingAPP.Data
                 await context.SaveChangesAsync();
             }
 
-            // Seed users
-            if (!userManager.Users.Any())
+            // Seed 10+ normal users if not present
+            var existingUserCount = userManager.Users.Count(u => u.Email != adminEmail);
+            if (existingUserCount < 10)
             {
-                var users = new[]
+                for (int i = 1; i <= 10; i++)
                 {
-                    new ApplicationUser { UserName = "alice@softuni.bg", Email = "alice@softuni.bg", EmailConfirmed = true },
-                    new ApplicationUser { UserName = "bob@softuni.bg", Email = "bob@softuni.bg", EmailConfirmed = true }
-                };
-
-                foreach (var user in users)
-                {
-                    var result = await userManager.CreateAsync(user, "Passw0rd!");
-                    if (result.Succeeded)
+                    var email = $"user{i}@softuni.bg";
+                    if (await userManager.FindByEmailAsync(email) == null)
                     {
-                        await userManager.AddToRoleAsync(user, "User");
+                        var user = new ApplicationUser
+                        {
+                            UserName = email,
+                            Email = email,
+                            EmailConfirmed = true
+                        };
+
+                        var result = await userManager.CreateAsync(user, "Passw0rd!");
+                        if (result.Succeeded)
+                        {
+                            await userManager.AddToRoleAsync(user, "User");
+                        }
                     }
                 }
             }
 
-            // Seed bookings
+            // Seed 10+ bookings if not present
             if (!context.Bookings.Any())
             {
-                var alice = await userManager.FindByEmailAsync("alice@softuni.bg");
-                var bob = await userManager.FindByEmailAsync("bob@softuni.bg");
-                var engineer1 = context.Engineers.FirstOrDefault();
-                var engineer2 = context.Engineers.Skip(1).FirstOrDefault();
+                var allUsers = userManager.Users.Where(u => u.Email != adminEmail).ToList();
+                var allEngineers = context.Engineers.ToList();
+                var rand = new Random();
 
-                if (alice != null && bob != null && engineer1 != null && engineer2 != null)
+                var bookings = new List<Booking>();
+                for (int i = 0; i < 12; i++)
                 {
-                    context.Bookings.AddRange(
-                        new Booking
-                        {
-                            UserId = alice.Id,
-                            EngineerId = engineer1.Id,
-                            SlotStart = DateTime.Today.AddDays(1).AddHours(9),
-                            SlotEnd = DateTime.Today.AddDays(1).AddHours(10),
-                            IssueDescription = "Printer not working"
-                        },
-                        new Booking
-                        {
-                            UserId = bob.Id,
-                            EngineerId = engineer2.Id,
-                            SlotStart = DateTime.Today.AddDays(2).AddHours(13),
-                            SlotEnd = DateTime.Today.AddDays(2).AddHours(14),
-                            IssueDescription = "Email configuration issue"
-                        }
-                    );
+                    var user = allUsers[rand.Next(allUsers.Count)];
+                    var engineer = allEngineers[rand.Next(allEngineers.Count)];
+                    var slotStart = DateTime.Today.AddDays(rand.Next(1, 10)).AddHours(rand.Next(8, 16));
+                    var slotEnd = slotStart.AddHours(1);
 
-                    await context.SaveChangesAsync();
+                    bookings.Add(new Booking
+                    {
+                        UserId = user.Id,
+                        EngineerId = engineer.Id,
+                        SlotStart = slotStart,
+                        SlotEnd = slotEnd,
+                        IssueDescription = $"Auto-generated issue #{i + 1}"
+                    });
                 }
+
+                context.Bookings.AddRange(bookings);
+                await context.SaveChangesAsync();
             }
         }
     }

@@ -20,25 +20,18 @@ namespace SupportBookingAPP.Data
         {
             base.OnModelCreating(builder);
 
-            // Seed Engineers with correct DateTime values
-            builder.Entity<Engineer>().HasData(
-                new Engineer
-                {
-                    Id = 1,
-                    Name = "Alice Ivanova",
-                    Specialty = "Networking",
-                    WorkdayStart = DateTime.Today.AddHours(9),
-                    WorkdayEnd = DateTime.Today.AddHours(17)
-                },
-                new Engineer
-                {
-                    Id = 2,
-                    Name = "Boris Petrov",
-                    Specialty = "Hardware",
-                    WorkdayStart = DateTime.Today.AddHours(10),
-                    WorkdayEnd = DateTime.Today.AddHours(18)
-                }
-            );
+            // Optional: Fluent API relationship configs (if needed)
+            builder.Entity<Booking>()
+                .HasOne(b => b.Engineer)
+                .WithMany()
+                .HasForeignKey(b => b.EngineerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Booking>()
+                .HasOne(b => b.User)
+                .WithMany()
+                .HasForeignKey(b => b.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

@@ -232,12 +232,19 @@ namespace SupportBookingAPP.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<int>("EngineerId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("EngineerId1")
                         .HasColumnType("int");
 
                     b.Property<string>("IssueDescription")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<DateTime>("SlotEnd")
                         .HasColumnType("datetime2");
@@ -251,7 +258,11 @@ namespace SupportBookingAPP.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ApplicationUserId");
+
                     b.HasIndex("EngineerId");
+
+                    b.HasIndex("EngineerId1");
 
                     b.HasIndex("UserId");
 
@@ -287,26 +298,6 @@ namespace SupportBookingAPP.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Engineers");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Email = "",
-                            Name = "Alice Ivanova",
-                            Specialty = "Networking",
-                            WorkdayEnd = new DateTime(2025, 7, 22, 17, 0, 0, 0, DateTimeKind.Local),
-                            WorkdayStart = new DateTime(2025, 7, 22, 9, 0, 0, 0, DateTimeKind.Local)
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Email = "",
-                            Name = "Boris Petrov",
-                            Specialty = "Hardware",
-                            WorkdayEnd = new DateTime(2025, 7, 22, 18, 0, 0, 0, DateTimeKind.Local),
-                            WorkdayStart = new DateTime(2025, 7, 22, 10, 0, 0, 0, DateTimeKind.Local)
-                        });
                 });
 
             modelBuilder.Entity("SupportBookingAPP.Models.Notification", b =>
@@ -404,16 +395,24 @@ namespace SupportBookingAPP.Data.Migrations
 
             modelBuilder.Entity("SupportBookingAPP.Models.Booking", b =>
                 {
-                    b.HasOne("SupportBookingAPP.Models.Engineer", "Engineer")
+                    b.HasOne("SupportBookingAPP.Models.ApplicationUser", null)
                         .WithMany("Bookings")
+                        .HasForeignKey("ApplicationUserId");
+
+                    b.HasOne("SupportBookingAPP.Models.Engineer", "Engineer")
+                        .WithMany()
                         .HasForeignKey("EngineerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("SupportBookingAPP.Models.ApplicationUser", "User")
+                    b.HasOne("SupportBookingAPP.Models.Engineer", null)
                         .WithMany("Bookings")
+                        .HasForeignKey("EngineerId1");
+
+                    b.HasOne("SupportBookingAPP.Models.ApplicationUser", "User")
+                        .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Engineer");
