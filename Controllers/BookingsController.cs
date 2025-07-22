@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using SupportBookingAPP.Data;
 using SupportBookingAPP.Models;
@@ -74,7 +70,7 @@ namespace SupportBookingAPP.Controllers
                 _context.Add(booking);
                 await _context.SaveChangesAsync();
 
-                // ✅ BEGIN EMAIL LOGIC
+                
                 var engineer = await _context.Engineers.FindAsync(booking.EngineerId);
 
                 var emailService = HttpContext.RequestServices.GetRequiredService<EmailService>();
@@ -88,7 +84,7 @@ namespace SupportBookingAPP.Controllers
                 await emailService.SendEmailAsync(engineer.Email,
                     "New Booking Assigned",
                     $"Hi {engineer.Name},<br/>You have a new booking from {user.Email} scheduled at {booking.SlotStart:G}.");
-                // ✅ END EMAIL LOGIC
+               
 
                 return RedirectToAction(nameof(Index));
             }

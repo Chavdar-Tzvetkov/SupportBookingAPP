@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\build\SupportBookingAPP.props" />
-</Project>

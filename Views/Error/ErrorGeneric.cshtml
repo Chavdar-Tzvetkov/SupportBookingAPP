@@ -1,0 +1,8 @@
+﻿@model int
+@{
+    ViewData["Title"] = $"Error {Model}";
+}
+
+<h1 class="text-danger">Error @Model</h1>
+<p>Something went wrong. Please try again later.</p>
+<a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">Return to Home</a>

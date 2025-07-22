@@ -13,6 +13,8 @@ namespace SupportBookingAPP.Data
 
         public DbSet<Engineer> Engineers { get; set; }
         public DbSet<Booking> Bookings { get; set; }
+        public DbSet<SupportCategory> SupportCategories { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

@@ -1,0 +1,17 @@
+﻿@{
+    ViewData["Title"] = "Server Error";
+}
+
+<h1 class="text-danger">500 - Internal Server Error</h1>
+<p>We're sorry, server is gone.</p>
+
+@if (ViewData["Error"] != null)
+{
+    <p><strong>Error:</strong> @ViewData["Error"]</p>
+}
+@if (ViewData["Path"] != null)
+{
+    <p><strong>Path:</strong> @ViewData["Path"]</p>
+}
+
+<a asp-controller="Home" asp-action="Index" class="btn btn-primary">Back to Home</a>

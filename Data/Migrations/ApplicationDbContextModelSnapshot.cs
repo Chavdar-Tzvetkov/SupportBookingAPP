@@ -102,12 +102,10 @@ namespace SupportBookingAPP.Data.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderKey")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
@@ -144,12 +142,10 @@ namespace SupportBookingAPP.Data.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");
@@ -299,8 +295,8 @@ namespace SupportBookingAPP.Data.Migrations
                             Email = "",
                             Name = "Alice Ivanova",
                             Specialty = "Networking",
-                            WorkdayEnd = new DateTime(2025, 7, 11, 17, 0, 0, 0, DateTimeKind.Local),
-                            WorkdayStart = new DateTime(2025, 7, 11, 9, 0, 0, 0, DateTimeKind.Local)
+                            WorkdayEnd = new DateTime(2025, 7, 22, 17, 0, 0, 0, DateTimeKind.Local),
+                            WorkdayStart = new DateTime(2025, 7, 22, 9, 0, 0, 0, DateTimeKind.Local)
                         },
                         new
                         {
@@ -308,9 +304,51 @@ namespace SupportBookingAPP.Data.Migrations
                             Email = "",
                             Name = "Boris Petrov",
                             Specialty = "Hardware",
-                            WorkdayEnd = new DateTime(2025, 7, 11, 18, 0, 0, 0, DateTimeKind.Local),
-                            WorkdayStart = new DateTime(2025, 7, 11, 10, 0, 0, 0, DateTimeKind.Local)
+                            WorkdayEnd = new DateTime(2025, 7, 22, 18, 0, 0, 0, DateTimeKind.Local),
+                            WorkdayStart = new DateTime(2025, 7, 22, 10, 0, 0, 0, DateTimeKind.Local)
                         });
+                });
+
+            modelBuilder.Entity("SupportBookingAPP.Models.Notification", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("BookingId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("NotifyAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("Sent")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookingId");
+
+                    b.ToTable("Notifications");
+                });
+
+            modelBuilder.Entity("SupportBookingAPP.Models.SupportCategory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SupportCategories");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -381,6 +419,17 @@ namespace SupportBookingAPP.Data.Migrations
                     b.Navigation("Engineer");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("SupportBookingAPP.Models.Notification", b =>
+                {
+                    b.HasOne("SupportBookingAPP.Models.Booking", "Booking")
+                        .WithMany()
+                        .HasForeignKey("BookingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Booking");
                 });
 
             modelBuilder.Entity("SupportBookingAPP.Models.ApplicationUser", b =>

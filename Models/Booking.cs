@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace SupportBookingAPP.Models
 {
@@ -6,16 +6,25 @@ namespace SupportBookingAPP.Models
     {
         public int Id { get; set; }
 
-        public string UserId { get; set; } = string.Empty;
-        public ApplicationUser User { get; set; } = null!;
+        [Required]
+        public string UserId { get; set; }
 
+        [Required]
         public int EngineerId { get; set; }
-        public Engineer Engineer { get; set; } = null!;
 
+        [Required]
         public DateTime SlotStart { get; set; }
+
+        [Required]
+        [DateGreaterThan(nameof(SlotStart), ErrorMessage = "End must be after start")]
         public DateTime SlotEnd { get; set; }
 
-        public string IssueDescription { get; set; } = string.Empty;
+        [Required, StringLength(500)]
+        public string IssueDescription { get; set; }
+
+        public virtual ApplicationUser User { get; set; }
+        public virtual Engineer Engineer { get; set; }
     }
+
 
 }

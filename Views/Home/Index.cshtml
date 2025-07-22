@@ -7,12 +7,17 @@
     <p class="lead">Easily schedule technical support with available engineers.</p>
     <p>To get started, register or log in to your account, then choose an available time slot.</p>
 
-    @if (!User.Identity?.IsAuthenticated ?? true)
-    {
-        <a class="btn btn-primary btn-lg mt-3" asp-area="Identity" asp-page="/Account/Register">Get Started</a>
-    }
-    else
+    @using Microsoft.AspNetCore.Identity
+    @inject SignInManager<ApplicationUser> SignInManager
+
+    @if (SignInManager.IsSignedIn(User))
     {
         <a class="btn btn-success btn-lg mt-3" asp-controller="Bookings" asp-action="Create">Book a Slot</a>
     }
+    else
+    {
+        <a class="btn btn-primary btn-lg mt-3" asp-area="Identity" asp-page="/Account/Login">Get Started</a>
+    }
+
+
 </div>
