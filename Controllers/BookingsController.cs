@@ -58,6 +58,18 @@ namespace SupportBookingAPP.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("EngineerId,SlotStart,SlotEnd,IssueDescription")] Booking booking)
         {
+            if (!ModelState.IsValid)
+            {
+                foreach (var key in ModelState.Keys)
+                {
+                    var errors = ModelState[key].Errors;
+                    foreach (var error in errors)
+                    {
+                        Console.WriteLine($"Validation error in {key}: {error.ErrorMessage}");
+                    }
+                }
+            }
+
             if (ModelState.IsValid)
             {
                 var user = await _userManager.GetUserAsync(User);

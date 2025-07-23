@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System.ComponentModel.DataAnnotations;
 
 namespace SupportBookingAPP.Models
 {
@@ -6,8 +7,8 @@ namespace SupportBookingAPP.Models
     {
         public int Id { get; set; }
 
-        [Required]
-        public string UserId { get; set; }
+        
+        public string? UserId { get; set; }
 
         [Required]
         public int EngineerId { get; set; }
@@ -16,14 +17,18 @@ namespace SupportBookingAPP.Models
         public DateTime SlotStart { get; set; }
 
         [Required]
-        [DateGreaterThan(nameof(SlotStart), ErrorMessage = "End must be after start")]
+        [DateGreaterThan(nameof(SlotStart), ErrorMessage = "End time must be after start time")]
         public DateTime SlotEnd { get; set; }
 
-        [Required, StringLength(500)]
-        public string IssueDescription { get; set; }
+        [Required]
+        [StringLength(500, MinimumLength = 10, ErrorMessage = "Issue description must be between 10 and 500 characters.")]
+        public required string IssueDescription { get; set; }
 
-        public virtual ApplicationUser User { get; set; }
-        public virtual Engineer Engineer { get; set; }
+        [ValidateNever]
+        public ApplicationUser? User { get; set; }
+
+        [ValidateNever]
+        public Engineer? Engineer { get; set; }
     }
 
 

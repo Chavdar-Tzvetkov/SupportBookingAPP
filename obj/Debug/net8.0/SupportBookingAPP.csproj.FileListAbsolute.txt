@@ -331,3 +331,4 @@ D:\VisualStudioProjects\SupportBookingAPP\obj\Debug\net8.0\refint\SupportBooking
 D:\VisualStudioProjects\SupportBookingAPP\obj\Debug\net8.0\SupportBookingAPP.pdb
 D:\VisualStudioProjects\SupportBookingAPP\obj\Debug\net8.0\SupportBookingAPP.genruntimeconfig.cache
 D:\VisualStudioProjects\SupportBookingAPP\obj\Debug\net8.0\ref\SupportBookingAPP.dll
+D:\VisualStudioProjects\SupportBookingAPP\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt

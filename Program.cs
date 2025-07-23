@@ -35,15 +35,21 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.AccessDeniedPath = "/Error/403";
 });
 
-// Razor + Controllers
+
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
 // EmailService registered as IEmailSender
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+#if DEBUG
+// In Development: Use dummy email sender
+builder.Services.AddTransient<IEmailSender, DevEmailService>();
+#else
+// PROD: Use actual email service for real SMTP delivery
 builder.Services.AddTransient<IEmailSender, EmailService>();
+#endif
 
-// Optional: If you need to use EmailService directly (e.g., for NotificationService)
+
 builder.Services.AddTransient<EmailService>();
 
 // Notifications & admin seeding
