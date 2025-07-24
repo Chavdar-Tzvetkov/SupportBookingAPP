@@ -1,38 +1,49 @@
-@model IEnumerable<SupportBookingAPP.Models.Booking>
+﻿@model IEnumerable<SupportBookingAPP.Models.Booking>
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> UserManager
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Bookings Overview";
+    var currentUser = await UserManager.GetUserAsync(User);
+    var isAdmin = User.IsInRole("Admin");
 }
 
-<h1>Index</h1>
+<h1 class="mb-4">Bookings Overview</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-success">📅 New Booking</a>
 </p>
-<table class="table">
-    <thead>
+
+<table class="table table-striped table-bordered">
+    <thead class="thead-dark">
         <tr>
-            <th>@Html.DisplayNameFor(model => model.SlotStart)</th>
-            <th>@Html.DisplayNameFor(model => model.SlotEnd)</th>
-            <th>@Html.DisplayNameFor(model => model.IssueDescription)</th>
-            <th>User Email</th>
-            <th>Engineer Name</th>
-            <th></th>
+            <th>Start</th>
+            <th>End</th>
+            <th>Issue</th>
+            <th>User</th>
+            <th>Engineer</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
+            var isOwner = item.UserId == currentUser?.Id;
+            var isEngineer = item.Engineer?.Email == currentUser?.Email;
+
             <tr>
                 <td>@item.SlotStart.ToString("g")</td>
                 <td>@item.SlotEnd.ToString("g")</td>
                 <td>@item.IssueDescription</td>
-                <td>@(item.User?.Email ?? "N/A")</td>
-                <td>@(item.Engineer?.Name ?? "N/A")</td>
+                <td>@item.User?.Email</td>
+                <td>@item.Engineer?.Name</td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    @if (isAdmin || isEngineer || isOwner)
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-primary">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a>
+                    }
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-secondary">Details</a>
                 </td>
             </tr>
         }

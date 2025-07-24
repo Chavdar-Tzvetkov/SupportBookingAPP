@@ -1,47 +1,38 @@
-@model IEnumerable<SupportBookingAPP.Models.Notification>
-
+﻿@model IEnumerable<SupportBookingAPP.Models.Notification>
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Notifications";
 }
 
-<h1>Index</h1>
+<h1 class="mb-4">Notifications</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-success">🔔 Create New Notification</a>
 </p>
-<table class="table">
-    <thead>
+
+<table class="table table-bordered table-striped">
+    <thead class="thead-dark">
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.NotifyAt)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Sent)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Booking)
-            </th>
+            <th>Notify At</th>
+            <th>Sent</th>
+            <th>Booking Slot</th>
+            <th>Booking User</th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.NotifyAt)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Sent)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Booking.Id)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.NotifyAt.ToString("f")</td>
+                <td>@(item.Sent ? "✅ Yes" : "❌ No")</td>
+                <td>@item.Booking?.SlotStart.ToString("g")</td>
+                <td>@item.Booking?.User?.Email</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-primary">Edit</a>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-secondary">Details</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

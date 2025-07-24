@@ -1,44 +1,36 @@
 @model SupportBookingAPP.Models.Notification
-
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit Notification";
 }
 
-<h1>Edit</h1>
-
-<h4>Notification</h4>
+<h1>Edit Notification</h1>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="BookingId" class="control-label"></label>
-                <select asp-for="BookingId" class="form-control" asp-items="ViewBag.BookingId"></select>
-                <span asp-validation-for="BookingId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="NotifyAt" class="control-label"></label>
-                <input asp-for="NotifyAt" class="form-control" />
-                <span asp-validation-for="NotifyAt" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="Sent" /> @Html.DisplayNameFor(model => model.Sent)
-                </label>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+<form asp-action="Edit">
+    <input type="hidden" asp-for="Id" />
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="form-group">
+        <label asp-for="BookingId"></label>
+        <select asp-for="BookingId" class="form-control" asp-items="ViewBag.BookingId"></select>
+        <span asp-validation-for="BookingId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="NotifyAt"></label>
+        <input asp-for="NotifyAt" class="form-control" type="datetime-local" />
+        <span asp-validation-for="NotifyAt" class="text-danger"></span>
+    </div>
+
+    <div class="form-group form-check">
+        <input class="form-check-input" asp-for="Sent" />
+        <label asp-for="Sent" class="form-check-label"></label>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <partial name="_ValidationScriptsPartial" />
 }

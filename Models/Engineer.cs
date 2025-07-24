@@ -7,11 +7,15 @@ namespace SupportBookingAPP.Models
         public int Id { get; set; }
 
         [Required]
+        [StringLength(100)]
         public string Name { get; set; } = string.Empty;
 
         [Required]
+        [EmailAddress]
         public string Email { get; set; } = string.Empty;
+
         [Required]
+        [StringLength(100)]
         public string Specialty { get; set; } = string.Empty;
 
         [Required]
@@ -22,7 +26,7 @@ namespace SupportBookingAPP.Models
         [Display(Name = "End of Workday")]
         public DateTime WorkdayEnd { get; set; }
 
-        // Optional: Navigation property
+        //Navigation property
         public ICollection<Booking> Bookings { get; set; } = new List<Booking>();
     }
 }

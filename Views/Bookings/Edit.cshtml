@@ -1,54 +1,50 @@
 @model SupportBookingAPP.Models.Booking
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit Booking";
 }
 
-<h1>Edit</h1>
-
-<h4>Booking</h4>
+<h1>Edit Booking</h1>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="UserId" class="control-label"></label>
-                <select asp-for="UserId" class="form-control" asp-items="ViewBag.UserId"></select>
-                <span asp-validation-for="UserId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="EngineerId" class="control-label"></label>
-                <select asp-for="EngineerId" class="form-control" asp-items="ViewBag.EngineerId"></select>
-                <span asp-validation-for="EngineerId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="SlotStart" class="control-label"></label>
-                <input asp-for="SlotStart" class="form-control" />
-                <span asp-validation-for="SlotStart" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="SlotEnd" class="control-label"></label>
-                <input asp-for="SlotEnd" class="form-control" />
-                <span asp-validation-for="SlotEnd" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="IssueDescription" class="control-label"></label>
-                <input asp-for="IssueDescription" class="form-control" />
-                <span asp-validation-for="IssueDescription" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+<form asp-action="Edit">
+    <input type="hidden" asp-for="Id" />
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="form-group">
+        <label asp-for="UserId"></label>
+        <select asp-for="UserId" class="form-control" asp-items="ViewBag.UserId"></select>
+        <span asp-validation-for="UserId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="EngineerId"></label>
+        <select asp-for="EngineerId" class="form-control" asp-items="ViewBag.EngineerId"></select>
+        <span asp-validation-for="EngineerId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="SlotStart"></label>
+        <input asp-for="SlotStart" class="form-control" type="datetime-local" />
+        <span asp-validation-for="SlotStart" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="SlotEnd"></label>
+        <input asp-for="SlotEnd" class="form-control" type="datetime-local" />
+        <span asp-validation-for="SlotEnd" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="IssueDescription"></label>
+        <textarea asp-for="IssueDescription" class="form-control" rows="4"></textarea>
+        <span asp-validation-for="IssueDescription" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</form>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <partial name="_ValidationScriptsPartial" />
 }

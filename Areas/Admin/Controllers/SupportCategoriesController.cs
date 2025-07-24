@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace SupportBookingAPP.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = "Administrator")]
+    [Authorize(Roles = "Admin")]
     public class SupportCategoriesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -53,8 +53,7 @@ namespace SupportBookingAPP.Areas.Admin.Controllers
         }
 
         // POST: SupportCategories/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name")] SupportCategory supportCategory)
@@ -85,8 +84,7 @@ namespace SupportBookingAPP.Areas.Admin.Controllers
         }
 
         // POST: SupportCategories/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] SupportCategory supportCategory)

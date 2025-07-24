@@ -16,8 +16,8 @@ namespace SupportBookingAPP.Data
             var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
             var adminSettings = services.GetRequiredService<IOptions<AdminUserSettings>>().Value;
 
-            // Create roles if they don't exist
-            string[] roles = { "Administrator", "User" };
+            // === Seed Roles ===
+            string[] roles = { "Admin", "User" };
             foreach (var role in roles)
             {
                 if (!await roleManager.RoleExistsAsync(role))
@@ -26,10 +26,10 @@ namespace SupportBookingAPP.Data
                 }
             }
 
-            // Seed Admin User from secrets
+            // === Seed Admin ===
             var adminEmail = adminSettings.Email;
             var adminPassword = adminSettings.Password;
-            var adminRole = string.IsNullOrEmpty(adminSettings.Role) ? "Administrator" : adminSettings.Role;
+            var adminRole = "Admin"; // force the correct name regardless of config
 
             var adminUser = await userManager.FindByEmailAsync(adminEmail);
             if (adminUser == null)
@@ -51,8 +51,17 @@ namespace SupportBookingAPP.Data
                     throw new Exception("Failed to create Admin user: " + string.Join(", ", result.Errors.Select(e => e.Description)));
                 }
             }
+            else
+            {
+                // Ensure role is applied in case user existed
+                var rolesForUser = await userManager.GetRolesAsync(adminUser);
+                if (!rolesForUser.Contains(adminRole))
+                {
+                    await userManager.AddToRoleAsync(adminUser, adminRole);
+                }
+            }
 
-            // Seed Engineers
+            // === Seed Engineers ===
             if (!context.Engineers.Any())
             {
                 var engineers = new List<Engineer>
@@ -66,7 +75,7 @@ namespace SupportBookingAPP.Data
                 await context.SaveChangesAsync();
             }
 
-            // Seed 10+ normal users if not present
+            // === Seed Users ===
             var existingUserCount = userManager.Users.Count(u => u.Email != adminEmail);
             if (existingUserCount < 10)
             {
@@ -91,7 +100,7 @@ namespace SupportBookingAPP.Data
                 }
             }
 
-            // Seed 10+ bookings if not present
+            // === Seed Bookings ===
             if (!context.Bookings.Any())
             {
                 var allUsers = userManager.Users.Where(u => u.Email != adminEmail).ToList();
@@ -103,7 +112,8 @@ namespace SupportBookingAPP.Data
                 {
                     var user = allUsers[rand.Next(allUsers.Count)];
                     var engineer = allEngineers[rand.Next(allEngineers.Count)];
-                    var slotStart = DateTime.Today.AddDays(rand.Next(1, 10)).AddHours(rand.Next(8, 16));
+                    var startHour = rand.Next(9, 16); // business hours
+                    var slotStart = DateTime.Today.AddDays(rand.Next(1, 10)).AddHours(startHour);
                     var slotEnd = slotStart.AddHours(1);
 
                     bookings.Add(new Booking

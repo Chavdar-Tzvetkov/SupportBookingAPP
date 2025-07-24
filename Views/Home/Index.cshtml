@@ -2,22 +2,32 @@
     ViewData["Title"] = "Welcome";
 }
 
-<div class="text-center mt-5">
-    <h1 class="display-4">Welcome to the Support Booking App</h1>
-    <p class="lead">Easily schedule technical support with available engineers.</p>
-    <p>To get started, register or log in to your account, then choose an available time slot.</p>
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
 
-    @using Microsoft.AspNetCore.Identity
-    @inject SignInManager<ApplicationUser> SignInManager
+<div class="container mt-5">
+    <div class="text-center py-5">
+        <h1 class="fw-bold display-5 text-dark mb-3">Welcome to</h1>
+        <h2 class="fw-light display-6 text-primary mb-4">Support Booking App</h2>
 
-    @if (SignInManager.IsSignedIn(User))
-    {
-        <a class="btn btn-success btn-lg mt-3" asp-controller="Bookings" asp-action="Create">Book a Slot</a>
-    }
-    else
-    {
-        <a class="btn btn-primary btn-lg mt-3" asp-area="Identity" asp-page="/Account/Login">Get Started</a>
-    }
+        <p class="lead text-secondary mb-3">
+            Easily schedule technical support with available engineers at your convenience.
+        </p>
+        <p class="text-muted">
+            Just log in or register, and select an available time slot that works for you.
+        </p>
 
-
+        @if (SignInManager.IsSignedIn(User))
+        {
+            <a class="btn btn-success btn-lg px-4 mt-4 shadow-sm" asp-controller="Bookings" asp-action="Create">
+                Book a Slot
+            </a>
+        }
+        else
+        {
+            <a class="btn btn-primary btn-lg px-4 mt-4 shadow-sm" asp-area="Identity" asp-page="/Account/Login">
+                Get Started
+            </a>
+        }
+    </div>
 </div>

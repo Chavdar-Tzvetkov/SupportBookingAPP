@@ -325,10 +325,10 @@ D:\VisualStudioProjects\SupportBookingAPP\obj\Debug\net8.0\staticwebassets.build
 D:\VisualStudioProjects\SupportBookingAPP\obj\Debug\net8.0\staticwebassets.build.json.cache
 D:\VisualStudioProjects\SupportBookingAPP\obj\Debug\net8.0\staticwebassets.development.json
 D:\VisualStudioProjects\SupportBookingAPP\obj\Debug\net8.0\staticwebassets.build.endpoints.json
+D:\VisualStudioProjects\SupportBookingAPP\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
 D:\VisualStudioProjects\SupportBookingAPP\obj\Debug\net8.0\SupportB.8DE3227F.Up2Date
 D:\VisualStudioProjects\SupportBookingAPP\obj\Debug\net8.0\SupportBookingAPP.dll
 D:\VisualStudioProjects\SupportBookingAPP\obj\Debug\net8.0\refint\SupportBookingAPP.dll
 D:\VisualStudioProjects\SupportBookingAPP\obj\Debug\net8.0\SupportBookingAPP.pdb
 D:\VisualStudioProjects\SupportBookingAPP\obj\Debug\net8.0\SupportBookingAPP.genruntimeconfig.cache
 D:\VisualStudioProjects\SupportBookingAPP\obj\Debug\net8.0\ref\SupportBookingAPP.dll
-D:\VisualStudioProjects\SupportBookingAPP\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt

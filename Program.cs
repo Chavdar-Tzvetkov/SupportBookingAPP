@@ -58,6 +58,13 @@ builder.Services.Configure<AdminUserSettings>(builder.Configuration.GetSection("
 
 var app = builder.Build();
 
+app.UseHttpsRedirection();
+app.UseStaticFiles();
+
+app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
+
 // Error handling
 if (!app.Environment.IsDevelopment())
 {
@@ -70,13 +77,6 @@ else
     app.UseMigrationsEndPoint();
 }
 
-app.UseHttpsRedirection();
-app.UseStaticFiles();
-
-app.UseRouting();
-app.UseAuthentication();
-app.UseAuthorization();
-
 // Seeding + background work
 await DataSeeder.SeedInitialDataAsync(app);
 await app.Services.GetRequiredService<NotificationService>().RunPendingAsync();
@@ -84,7 +84,8 @@ await app.Services.GetRequiredService<NotificationService>().RunPendingAsync();
 // Routing
 app.MapControllerRoute(
     name: "areas",
-    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+    pattern: "{area:exists}/{controller=Admin}/{action=Index}/{id?}");
+
 
 app.MapControllerRoute(
     name: "default",
