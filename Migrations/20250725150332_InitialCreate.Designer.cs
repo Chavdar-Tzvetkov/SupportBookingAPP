@@ -9,11 +9,11 @@ using SupportBookingAPP.Data;
 
 #nullable disable
 
-namespace SupportBookingAPP.Data.Migrations
+namespace SupportBookingAPP.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250711135455_AddEngineerEmail")]
-    partial class AddEngineerEmail
+    [Migration("20250725150332_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -105,12 +105,10 @@ namespace SupportBookingAPP.Data.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderKey")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
@@ -147,12 +145,10 @@ namespace SupportBookingAPP.Data.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");
@@ -184,6 +180,16 @@ namespace SupportBookingAPP.Data.Migrations
                     b.Property<string>("EquipmentId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -239,12 +245,19 @@ namespace SupportBookingAPP.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<int>("EngineerId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("EngineerId1")
                         .HasColumnType("int");
 
                     b.Property<string>("IssueDescription")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<DateTime>("SlotEnd")
                         .HasColumnType("datetime2");
@@ -253,12 +266,15 @@ namespace SupportBookingAPP.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ApplicationUserId");
+
                     b.HasIndex("EngineerId");
+
+                    b.HasIndex("EngineerId1");
 
                     b.HasIndex("UserId");
 
@@ -279,11 +295,13 @@ namespace SupportBookingAPP.Data.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Specialty")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTime>("WorkdayEnd")
                         .HasColumnType("datetime2");
@@ -294,26 +312,48 @@ namespace SupportBookingAPP.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Engineers");
+                });
 
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Email = "",
-                            Name = "Alice Ivanova",
-                            Specialty = "Networking",
-                            WorkdayEnd = new DateTime(2025, 7, 11, 17, 0, 0, 0, DateTimeKind.Local),
-                            WorkdayStart = new DateTime(2025, 7, 11, 9, 0, 0, 0, DateTimeKind.Local)
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Email = "",
-                            Name = "Boris Petrov",
-                            Specialty = "Hardware",
-                            WorkdayEnd = new DateTime(2025, 7, 11, 18, 0, 0, 0, DateTimeKind.Local),
-                            WorkdayStart = new DateTime(2025, 7, 11, 10, 0, 0, 0, DateTimeKind.Local)
-                        });
+            modelBuilder.Entity("SupportBookingAPP.Models.Notification", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("BookingId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("NotifyAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("Sent")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookingId");
+
+                    b.ToTable("Notifications");
+                });
+
+            modelBuilder.Entity("SupportBookingAPP.Models.SupportCategory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SupportCategories");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -369,21 +409,39 @@ namespace SupportBookingAPP.Data.Migrations
 
             modelBuilder.Entity("SupportBookingAPP.Models.Booking", b =>
                 {
-                    b.HasOne("SupportBookingAPP.Models.Engineer", "Engineer")
+                    b.HasOne("SupportBookingAPP.Models.ApplicationUser", null)
                         .WithMany("Bookings")
+                        .HasForeignKey("ApplicationUserId");
+
+                    b.HasOne("SupportBookingAPP.Models.Engineer", "Engineer")
+                        .WithMany()
                         .HasForeignKey("EngineerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("SupportBookingAPP.Models.ApplicationUser", "User")
+                    b.HasOne("SupportBookingAPP.Models.Engineer", null)
                         .WithMany("Bookings")
+                        .HasForeignKey("EngineerId1");
+
+                    b.HasOne("SupportBookingAPP.Models.ApplicationUser", "User")
+                        .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Engineer");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("SupportBookingAPP.Models.Notification", b =>
+                {
+                    b.HasOne("SupportBookingAPP.Models.Booking", "Booking")
+                        .WithMany()
+                        .HasForeignKey("BookingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Booking");
                 });
 
             modelBuilder.Entity("SupportBookingAPP.Models.ApplicationUser", b =>

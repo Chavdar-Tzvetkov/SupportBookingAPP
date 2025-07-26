@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Identity.UI.Services; // This is where IEmailSender comes from
 using SupportBookingAPP.Data;
 using SupportBookingAPP.Models;
 
@@ -8,12 +9,12 @@ namespace SupportBookingAPP.Services
     public class NotificationService
     {
         private readonly IServiceScopeFactory _scopeFactory;
-        private readonly EmailService _emailService;
+        private readonly IEmailSender _emailSender;
 
-        public NotificationService(IServiceScopeFactory scopeFactory, EmailService emailService)
+        public NotificationService(IServiceScopeFactory scopeFactory, IEmailSender emailSender)
         {
             _scopeFactory = scopeFactory;
-            _emailService = emailService;
+            _emailSender = emailSender;
         }
 
         public async Task RunPendingAsync()
@@ -33,7 +34,7 @@ namespace SupportBookingAPP.Services
                 var user = n.Booking.User!;
                 var eng = n.Booking.Engineer!;
 
-                await _emailService.SendEmailAsync(user.Email!,
+                await _emailSender.SendEmailAsync(user.Email!,
                     "Upcoming Support Slot",
                     $"Reminder: your slot with {eng.Name} at {n.Booking.SlotStart:G} is coming up.");
 

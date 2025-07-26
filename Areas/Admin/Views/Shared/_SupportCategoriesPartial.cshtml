@@ -1,0 +1,19 @@
+﻿@model IEnumerable<SupportBookingAPP.Models.SupportCategory>
+
+<h4>📂 Support Categories</h4>
+<table class="table table-bordered table-hover table-striped">
+    <thead class="table-light">
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var cat in Model)
+        {
+            <tr>
+                <td>@cat.Name</td>
+            </tr>
+        }
+    </tbody>
+</table>

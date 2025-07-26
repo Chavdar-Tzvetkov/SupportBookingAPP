@@ -1,4 +1,5 @@
 ﻿using SupportBookingAPP.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace SupportBookingAPP.Areas.Admin.Models
 {
@@ -6,7 +7,8 @@ namespace SupportBookingAPP.Areas.Admin.Models
     {
         public List<UserWithRoles>? Users { get; set; }
         public List<Engineer>? Engineers { get; set; }
-        public List<Booking>? Bookings { get; set; }
+        public List<Booking> Bookings { get; set; }
+        public List<SupportCategory>? Categories { get; set; } 
     }
 
     public class UserWithRoles

@@ -49,6 +49,7 @@ builder.Services.AddTransient<IEmailSender, DevEmailService>();
 builder.Services.AddTransient<IEmailSender, EmailService>();
 #endif
 
+builder.Services.AddScoped<BookingService>();
 
 builder.Services.AddTransient<EmailService>();
 

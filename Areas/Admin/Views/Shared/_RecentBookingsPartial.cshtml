@@ -1,0 +1,32 @@
+﻿@model IEnumerable<SupportBookingAPP.Models.Booking>
+
+<h4>📅 Recent Bookings</h4>
+<table class="table table-bordered table-hover table-sm">
+    <thead class="table-light">
+        <tr>
+            <th>User</th>
+            <th>Engineer</th>
+            <th>Start</th>
+            <th>End</th>
+            <th>Issue</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var b in Model)
+        {
+            <tr>
+                <td>@b.User?.Email</td>
+                <td>@b.Engineer?.Name</td>
+                <td>@b.SlotStart.ToString("dd.MM.yyyy HH:mm")</td>
+                <td>@b.SlotEnd.ToString("dd.MM.yyyy HH:mm")</td>
+                <td>@b.IssueDescription</td>
+                <td>
+                    <a asp-controller="Bookings" asp-action="Edit" asp-route-id="@b.Id" class="btn btn-sm btn-primary">Edit</a>
+                    <a asp-controller="Bookings" asp-action="Delete" asp-route-id="@b.Id" class="btn btn-sm btn-danger">Delete</a>
+                    <a asp-controller="Bookings" asp-action="Details" asp-route-id="@b.Id" class="btn btn-sm btn-secondary">Details</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

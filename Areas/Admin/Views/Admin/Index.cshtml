@@ -1,59 +1,124 @@
 ﻿@model SupportBookingAPP.Areas.Admin.Models.AdminDashboardViewModel
 @{
-    ViewData["Title"] = "Administrator Dashboard";
+    ViewData["Title"] = "Admin Dashboard";
 }
 
-<h2 class="mb-4">Admin Dashboard</h2>
+<h2 class="mt-3 mb-4">🛠 Admin Dashboard</h2>
 
-<div class="accordion" id="adminAccordion">
+<div class="accordion" id="adminDashboardAccordion">
+
+    <!-- Summary Tiles -->
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card border-primary text-center">
+                <div class="card-body">
+                    <h5 class="card-title">👩‍💻 Engineers</h5>
+                    <p class="display-6">@Model.Engineers?.Count()</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-warning text-center">
+                <div class="card-body">
+                    <h5 class="card-title">📂 Categories</h5>
+                    <p class="display-6">@Model.Categories?.Count()</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-success text-center">
+                <div class="card-body">
+                    <h5 class="card-title">📅 Bookings</h5>
+                    <p class="display-6">@Model.Bookings?.Count()</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Engineers Section -->
     <div class="accordion-item">
-        <h2 class="accordion-header" id="engineersHeading">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#engineersCollapse" aria-expanded="false">
-                🛠️ Engineers
+        <h2 class="accordion-header" id="headingEngineers">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEngineers">
+                👨‍🔧 Engineers
             </button>
         </h2>
-        <div id="engineersCollapse" class="accordion-collapse collapse" data-bs-parent="#adminAccordion">
+        <div id="collapseEngineers" class="accordion-collapse collapse show" data-bs-parent="#adminDashboardAccordion">
             <div class="accordion-body">
-                <table class="table table-bordered table-hover">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Specialty</th>
-                            <th>Working Hours</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var eng in Model.Engineers)
-                        {
+                @if (Model.Engineers != null && Model.Engineers.Any())
+                {
+                    <table class="table table-striped table-hover">
+                        <thead>
                             <tr>
-                                <td>@eng.Name</td>
-                                <td>@(!string.IsNullOrWhiteSpace(eng.Specialty) ? eng.Specialty : "—")</td>
-                                <td>
-                                    @(eng.WorkdayStart != default ? eng.WorkdayStart.ToShortTimeString() : "--")
-                                    -
-                                    @(eng.WorkdayEnd != default ? eng.WorkdayEnd.ToShortTimeString() : "--")
-                                </td>
+                                <th>Name</th>
+                                <th>Email</th>
                             </tr>
-                        }
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @foreach (var eng in Model.Engineers)
+                            {
+                                <tr>
+                                    <td>@eng.Name</td>
+                                    <td>@eng.Email</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <p class="text-muted">No engineers available.</p>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Categories Section -->
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="headingCategories">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCategories">
+                📁 Support Categories
+            </button>
+        </h2>
+        <div id="collapseCategories" class="accordion-collapse collapse" data-bs-parent="#adminDashboardAccordion">
+            <div class="accordion-body">
+                @if (Model.Categories != null && Model.Categories.Any())
+                {
+                    <table class="table table-bordered table-sm">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var cat in Model.Categories)
+                            {
+                                <tr>
+                                    <td>@cat.Name</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <p class="text-muted">No categories defined.</p>
+                }
             </div>
         </div>
     </div>
 
     <!-- Bookings Section -->
     <div class="accordion-item">
-        <h2 class="accordion-header" id="bookingsHeading">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#bookingsCollapse" aria-expanded="false">
-                📅 Recent Bookings
+        <h2 class="accordion-header" id="headingBookings">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseBookings" aria-expanded="false" aria-controls="collapseBookings">
+                <i class="bi bi-journal-text me-2"></i> Recent Bookings
             </button>
         </h2>
-        <div id="bookingsCollapse" class="accordion-collapse collapse" data-bs-parent="#adminAccordion">
+        <div id="collapseBookings" class="accordion-collapse collapse" aria-labelledby="headingBookings" data-bs-parent="#adminAccordion">
             <div class="accordion-body">
-                <table class="table table-sm table-striped table-hover">
-                    <thead>
+                <table class="table table-sm table-hover">
+                    <thead class="table-light">
                         <tr>
                             <th>User</th>
                             <th>Engineer</th>
@@ -64,25 +129,26 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var b in Model.Bookings)
+                        @foreach (var booking in Model.Bookings)
                         {
                             <tr>
-                                <td>@b.User?.Email</td>
-                                <td>@b.Engineer?.Name</td>
-                                <td>@b.SlotStart.ToString("dd.MM.yyyy HH:mm")</td>
-                                <td>@b.SlotEnd.ToString("dd.MM.yyyy HH:mm")</td>
-                                <td>@b.IssueDescription</td>
+                                <td>@booking.User?.Email</td>
+                                <td>@booking.Engineer?.Name</td>
+                                <td>@booking.SlotStart.ToString("g")</td>
+                                <td>@booking.SlotEnd.ToString("g")</td>
+                                <td>@booking.IssueDescription</td>
                                 <td>
-                                    <a asp-controller="Bookings" asp-action="Edit" asp-route-id="@b.Id" class="btn btn-sm btn-primary">Edit</a>
-                                    <a asp-controller="Bookings" asp-action="Delete" asp-route-id="@b.Id" class="btn btn-sm btn-danger">Delete</a>
-                                    <a asp-controller="Bookings" asp-action="Details" asp-route-id="@b.Id" class="btn btn-sm btn-secondary">Details</a>
+                                    <a asp-area="" asp-controller="Bookings" asp-action="Edit" asp-route-id="@booking.Id" class="btn btn-sm btn-outline-primary me-1">Edit</a>
+                                    <a asp-area="" asp-controller="Bookings" asp-action="Delete" asp-route-id="@booking.Id" class="btn btn-sm btn-outline-danger me-1">Delete</a>
+                                    <a asp-area="" asp-controller="Bookings" asp-action="Details" asp-route-id="@booking.Id" class="btn btn-sm btn-outline-secondary">Details</a>
                                 </td>
                             </tr>
                         }
-
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
+
+
 </div>

@@ -25,15 +25,21 @@ namespace SupportBookingAPP.Areas.Admin.Controllers
         {
             var users = await _userManager.Users.ToListAsync();
             var userRoles = new Dictionary<string, IList<string>>();
+            var userWithRoles = new List<UserWithRoles>();
 
             foreach (var user in users)
             {
                 var roles = await _userManager.GetRolesAsync(user);
                 userRoles[user.Id] = roles;
+                userWithRoles.Add(new UserWithRoles
+                {
+                    Email = user.Email,
+                    Roles = roles.ToList()
+                });
             }
 
             var engineers = await _context.Engineers.ToListAsync();
-
+            var categories = await _context.SupportCategories.ToListAsync();
             var recentBookings = await _context.Bookings
                 .Include(b => b.User)
                 .Include(b => b.Engineer)
@@ -45,13 +51,10 @@ namespace SupportBookingAPP.Areas.Admin.Controllers
 
             var dashboardModel = new AdminDashboardViewModel
             {
-                Users = users.Select(u => new UserWithRoles
-                {
-                    Email = u.Email,
-                    Roles = userRoles[u.Id].ToList()
-                }).ToList(),
+                Users = userWithRoles,
                 Engineers = engineers,
-                Bookings = recentBookings 
+                Categories = categories,
+                Bookings = recentBookings
             };
 
             return View(dashboardModel);
