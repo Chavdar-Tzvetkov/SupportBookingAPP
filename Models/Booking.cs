@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SupportBookingAPP.Models
 {
@@ -11,8 +10,10 @@ namespace SupportBookingAPP.Models
         public string? UserId { get; set; }
 
         [Required]
-        [ForeignKey("Engineer")]
         public int EngineerId { get; set; }
+
+        [Required]
+        public int SupportCategoryId { get; set; }
 
         [Required]
         public DateTime SlotStart { get; set; }
@@ -30,5 +31,8 @@ namespace SupportBookingAPP.Models
 
         [ValidateNever]
         public Engineer Engineer { get; set; } = null!;
+
+        [ValidateNever]
+        public SupportCategory? SupportCategory { get; set; }
     }
 }

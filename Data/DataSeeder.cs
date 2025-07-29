@@ -113,6 +113,8 @@ namespace SupportBookingAPP.Data
                 var rand = new Random();
                 var bookings = new List<Booking>();
 
+                var defaultCategory = context.SupportCategories.First(); 
+
                 for (int i = 0; i < 12; i++)
                 {
                     var user = allUsers[rand.Next(allUsers.Count)];
@@ -127,9 +129,11 @@ namespace SupportBookingAPP.Data
                         EngineerId = engineer.Id,
                         SlotStart = slotStart,
                         SlotEnd = slotEnd,
-                        IssueDescription = $"Auto-generated issue #{i + 1}"
+                        IssueDescription = $"Auto-generated issue #{i + 1}",
+                        SupportCategoryId = defaultCategory.Id 
                     });
                 }
+
 
                 context.Bookings.AddRange(bookings);
                 await context.SaveChangesAsync();

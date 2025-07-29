@@ -3,33 +3,33 @@
     ViewData["Title"] = "Admin Dashboard";
 }
 
-<h2 class="mt-3 mb-4">🛠 Admin Dashboard</h2>
+<h1 class="mb-4 fw-bold">🛠 Admin Dashboard</h1>
 
 <div class="accordion" id="adminDashboardAccordion">
 
     <!-- Summary Tiles -->
     <div class="row mb-4">
         <div class="col-md-4">
-            <div class="card border-primary text-center">
+            <div class="card border-primary text-center shadow-sm">
                 <div class="card-body">
-                    <h5 class="card-title">👩‍💻 Engineers</h5>
-                    <p class="display-6">@Model.Engineers?.Count()</p>
+                    <h5 class="card-title fs-5">👩‍💻 Engineers</h5>
+                    <p class="fs-2 fw-semibold text-primary">@Model.Engineers?.Count()</p>
                 </div>
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card border-warning text-center">
+            <div class="card border-warning text-center shadow-sm">
                 <div class="card-body">
-                    <h5 class="card-title">📂 Categories</h5>
-                    <p class="display-6">@Model.Categories?.Count()</p>
+                    <h5 class="card-title fs-5">📂 Categories</h5>
+                    <p class="fs-2 fw-semibold text-warning">@Model.Categories?.Count()</p>
                 </div>
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card border-success text-center">
+            <div class="card border-success text-center shadow-sm">
                 <div class="card-body">
-                    <h5 class="card-title">📅 Bookings</h5>
-                    <p class="display-6">@Model.Bookings?.Count()</p>
+                    <h5 class="card-title fs-5">📅 Bookings</h5>
+                    <p class="fs-2 fw-semibold text-success">@Model.Bookings?.Count()</p>
                 </div>
             </div>
         </div>
@@ -46,8 +46,8 @@
             <div class="accordion-body">
                 @if (Model.Engineers != null && Model.Engineers.Any())
                 {
-                    <table class="table table-striped table-hover">
-                        <thead>
+                    <table class="table table-striped table-bordered align-middle">
+                        <thead class="table-dark">
                             <tr>
                                 <th>Name</th>
                                 <th>Email</th>
@@ -83,11 +83,10 @@
             <div class="accordion-body">
                 @if (Model.Categories != null && Model.Categories.Any())
                 {
-                    <table class="table table-bordered table-sm">
-                        <thead>
+                    <table class="table table-striped table-bordered align-middle">
+                        <thead class="table-dark">
                             <tr>
                                 <th>Name</th>
-                                <th>Description</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -111,20 +110,21 @@
     <!-- Bookings Section -->
     <div class="accordion-item">
         <h2 class="accordion-header" id="headingBookings">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseBookings" aria-expanded="false" aria-controls="collapseBookings">
-                <i class="bi bi-journal-text me-2"></i> Recent Bookings
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseBookings">
+                📅 Recent Bookings
             </button>
         </h2>
-        <div id="collapseBookings" class="accordion-collapse collapse" aria-labelledby="headingBookings" data-bs-parent="#adminAccordion">
+        <div id="collapseBookings" class="accordion-collapse collapse" data-bs-parent="#adminDashboardAccordion">
             <div class="accordion-body">
-                <table class="table table-sm table-hover">
-                    <thead class="table-light">
+                <table class="table table-striped table-bordered align-middle">
+                    <thead class="table-dark">
                         <tr>
                             <th>User</th>
                             <th>Engineer</th>
                             <th>Start</th>
                             <th>End</th>
                             <th>Issue</th>
+                            <th>Category</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -137,10 +137,11 @@
                                 <td>@booking.SlotStart.ToString("g")</td>
                                 <td>@booking.SlotEnd.ToString("g")</td>
                                 <td>@booking.IssueDescription</td>
+                                <td>@booking.SupportCategory?.Name</td>
                                 <td>
-                                    <a asp-area="" asp-controller="Bookings" asp-action="Edit" asp-route-id="@booking.Id" class="btn btn-sm btn-outline-primary me-1">Edit</a>
-                                    <a asp-area="" asp-controller="Bookings" asp-action="Delete" asp-route-id="@booking.Id" class="btn btn-sm btn-outline-danger me-1">Delete</a>
-                                    <a asp-area="" asp-controller="Bookings" asp-action="Details" asp-route-id="@booking.Id" class="btn btn-sm btn-outline-secondary">Details</a>
+                                    <a asp-area="" asp-controller="Bookings" asp-action="Edit" asp-route-id="@booking.Id" class="btn btn-sm btn-primary me-1">Edit</a>
+                                    <a asp-area="" asp-controller="Bookings" asp-action="Delete" asp-route-id="@booking.Id" class="btn btn-sm btn-danger me-1">Delete</a>
+                                    <a asp-area="" asp-controller="Bookings" asp-action="Details" asp-route-id="@booking.Id" class="btn btn-sm btn-secondary">Details</a>
                                 </td>
                             </tr>
                         }
@@ -149,6 +150,4 @@
             </div>
         </div>
     </div>
-
-
 </div>

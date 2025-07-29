@@ -20,6 +20,7 @@
             <th>Start</th>
             <th>End</th>
             <th>Issue</th>
+            <th>Category</th>
             <th>User</th>
             <th>Engineer</th>
             <th>Actions</th>
@@ -35,6 +36,7 @@
                 <td>@item.SlotStart.ToString("g")</td>
                 <td>@item.SlotEnd.ToString("g")</td>
                 <td>@item.IssueDescription</td>
+                <td>@item.SupportCategory?.Name</td>
                 <td>@item.User?.Email</td>
                 <td>@item.Engineer?.Name</td>
                 <td>

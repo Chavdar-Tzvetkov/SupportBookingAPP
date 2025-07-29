@@ -42,6 +42,7 @@ namespace SupportBookingAPP.Controllers
         public async Task<IActionResult> Create()
         {
             ViewData["EngineerId"] = await _bookingService.GetEngineerSelectListAsync();
+            ViewData["SupportCategoryId"] = new SelectList(_bookingService.GetAllCategories(), "Id", "Name");
             return View();
         }
 
@@ -49,7 +50,12 @@ namespace SupportBookingAPP.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Booking booking)
         {
-            if (!ModelState.IsValid) return View(booking);
+            if (!ModelState.IsValid)
+            {
+                ViewData["EngineerId"] = await _bookingService.GetEngineerSelectListAsync();
+                ViewData["SupportCategoryId"] = new SelectList(_bookingService.GetAllCategories(), "Id", "Name");
+                return View(booking);
+            }
 
             var user = await _userManager.GetUserAsync(User);
             if (user == null) return Challenge();
@@ -57,6 +63,7 @@ namespace SupportBookingAPP.Controllers
             await _bookingService.CreateAsync(booking, user);
             return RedirectToAction(nameof(Index));
         }
+
 
         public async Task<IActionResult> Edit(int? id)
         {
@@ -70,6 +77,9 @@ namespace SupportBookingAPP.Controllers
                 return Forbid();
 
             ViewData["EngineerId"] = await _bookingService.GetEngineerSelectListAsync();
+            ViewData["SupportCategoryId"] = new SelectList(_bookingService.GetAllCategories(), "Id", "Name", booking.SupportCategoryId);
+            ViewData["UserId"] = new SelectList(_userManager.Users.ToList(), "Id", "Email", booking.UserId);
+
             return View(booking);
         }
 
@@ -89,6 +99,7 @@ namespace SupportBookingAPP.Controllers
             original.SlotStart = booking.SlotStart;
             original.SlotEnd = booking.SlotEnd;
             original.IssueDescription = booking.IssueDescription;
+            original.SupportCategoryId = booking.SupportCategoryId;
 
             if (User.IsInRole("Admin"))
             {

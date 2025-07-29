@@ -19,6 +19,14 @@
     </div>
 
     <div class="form-group">
+        <label asp-for="SupportCategoryId" class="control-label"></label>
+        <select asp-for="SupportCategoryId" class="form-control" asp-items="ViewBag.SupportCategoryId">
+            <option value="">-- Select Category --</option>
+        </select>
+        <span asp-validation-for="SupportCategoryId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
         <label asp-for="SlotStart"></label>
         <input asp-for="SlotStart" class="form-control" type="datetime-local" />
         <span asp-validation-for="SlotStart" class="text-danger"></span>

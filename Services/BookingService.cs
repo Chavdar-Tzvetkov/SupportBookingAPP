@@ -24,12 +24,20 @@ namespace SupportBookingAPP.Services
 
         public async Task<List<Booking>> GetAllAsync()
         {
-            return await _context.Bookings.Include(b => b.Engineer).Include(b => b.User).ToListAsync();
+            return await _context.Bookings
+                .Include(b => b.Engineer)
+                .Include(b => b.User)
+                .Include(b => b.SupportCategory)
+                .ToListAsync();
         }
 
         public async Task<Booking?> GetByIdAsync(int id)
         {
-            return await _context.Bookings.Include(b => b.Engineer).Include(b => b.User).FirstOrDefaultAsync(b => b.Id == id);
+            return await _context.Bookings
+                .Include(b => b.Engineer)
+                .Include(b => b.User)
+                .Include(b => b.SupportCategory)
+                .FirstOrDefaultAsync(b => b.Id == id);
         }
 
         public async Task<bool> UserCanAccessBooking(ApplicationUser user, Booking booking)
@@ -45,6 +53,18 @@ namespace SupportBookingAPP.Services
             return await _context.Engineers
                 .Select(e => new SelectListItem { Value = e.Id.ToString(), Text = e.Name })
                 .ToListAsync();
+        }
+
+        public async Task<List<SelectListItem>> GetSupportCategorySelectListAsync()
+        {
+            return await _context.SupportCategories
+                .Select(c => new SelectListItem { Value = c.Id.ToString(), Text = c.Name })
+                .ToListAsync();
+        }
+
+        public IEnumerable<SupportCategory> GetAllCategories()
+        {
+            return _context.SupportCategories.AsNoTracking().OrderBy(c => c.Name).ToList();
         }
 
         public async Task CreateAsync(Booking booking, ApplicationUser user)
