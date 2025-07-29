@@ -20,7 +20,7 @@ namespace SupportBookingAPP.Data
         {
             base.OnModelCreating(builder);
 
-            // Optional: Fluent API relationship configs (if needed)
+            // Fluent API relationship configs
             builder.Entity<Booking>()
                 .HasOne(b => b.Engineer)
                 .WithMany()
