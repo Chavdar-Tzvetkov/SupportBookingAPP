@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SupportBookingAPP\SupportBookingAPP.csproj" />
+    <ProjectReference Include="..\SupportBookingAPP.csproj" />
   </ItemGroup>
 
   <ItemGroup>

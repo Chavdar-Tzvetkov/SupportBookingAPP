@@ -10,10 +10,10 @@ namespace SupportBookingAPP.Controllers
     [Authorize]
     public class BookingsController : Controller
     {
-        private readonly BookingService _bookingService;
+        private readonly IBookingService _bookingService;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public BookingsController(BookingService bookingService, UserManager<ApplicationUser> userManager)
+        public BookingsController(IBookingService bookingService, UserManager<ApplicationUser> userManager)
         {
             _bookingService = bookingService;
             _userManager = userManager;

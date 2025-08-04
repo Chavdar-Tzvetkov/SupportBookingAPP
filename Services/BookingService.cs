@@ -7,7 +7,7 @@ using SupportBookingAPP.Models;
 
 namespace SupportBookingAPP.Services
 {
-    public class BookingService
+    public class BookingService : IBookingService
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
