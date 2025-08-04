@@ -30,7 +30,7 @@ namespace SupportBookingAPP.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Notifications/Details/5
+        // GET: Notifications/Details
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null) return RedirectToAction("Error404", "Error");
@@ -78,7 +78,7 @@ namespace SupportBookingAPP.Controllers
             return View(notification);
         }
 
-        // GET: Notifications/Edit/5
+        // GET: Notifications/Edit/
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null) return RedirectToAction("Error404", "Error");
@@ -102,7 +102,7 @@ namespace SupportBookingAPP.Controllers
             return View(notification);
         }
 
-        // POST: Notifications/Edit/5
+        // POST: Notifications/Edit/
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,BookingId,NotifyAt,Sent")] Notification notification)
@@ -146,7 +146,7 @@ namespace SupportBookingAPP.Controllers
             return View(notification);
         }
 
-        // GET: Notifications/Delete/5
+        // GET: Notifications/Delete/
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null) return RedirectToAction("Error404", "Error");
@@ -169,7 +169,7 @@ namespace SupportBookingAPP.Controllers
             return View(notification);
         }
 
-        // POST: Notifications/Delete/5
+        // POST: Notifications/Delete/
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

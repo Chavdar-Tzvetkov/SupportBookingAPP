@@ -58,7 +58,7 @@ namespace SupportBookingAPP.Tests.Areas.Admin
 
             var userList = new List<ApplicationUser> { user }.AsQueryable();
 
-            // ✅ Use async-capable query provider
+            // Use async-capable query provider
             var mockUserStore = new Mock<IUserStore<ApplicationUser>>();
             var mockUserManager = new Mock<UserManager<ApplicationUser>>(
                 mockUserStore.Object, null, null, null, null, null, null, null, null
@@ -83,7 +83,7 @@ namespace SupportBookingAPP.Tests.Areas.Admin
         }
     }
 
-    // ✅ Async-capable test helper for IQueryable
+    // Async-capable test helper for IQueryable
     internal class TestAsyncQueryProvider<TEntity> : IAsyncQueryProvider
     {
         private readonly IQueryProvider _inner;

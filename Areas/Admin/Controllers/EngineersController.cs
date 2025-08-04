@@ -23,7 +23,7 @@ namespace SupportBookingAPP.Areas.Admin.Controllers
             return View(await _context.Engineers.ToListAsync());
         }
 
-        // GET: Engineers/Details/5
+        // GET: Engineers/Details/
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -62,7 +62,7 @@ namespace SupportBookingAPP.Areas.Admin.Controllers
             return View(engineer);
         }
 
-        // GET: Engineers/Edit/5
+        // GET: Engineers/Edit/
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -78,7 +78,7 @@ namespace SupportBookingAPP.Areas.Admin.Controllers
             return View(engineer);
         }
 
-        // POST: Engineers/Edit/5
+        // POST: Engineers/Edit/
         
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -112,7 +112,7 @@ namespace SupportBookingAPP.Areas.Admin.Controllers
             return View(engineer);
         }
 
-        // GET: Engineers/Delete/5
+        // GET: Engineers/Delete/
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -130,7 +130,7 @@ namespace SupportBookingAPP.Areas.Admin.Controllers
             return View(engineer);
         }
 
-        // POST: Engineers/Delete/5
+        // POST: Engineers/Delete/
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

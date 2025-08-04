@@ -35,7 +35,7 @@ namespace SupportBookingAPP.Tests.Services
             // Arrange
             var dbContext = GetInMemoryDbContext();
 
-            // --- New: seed one category ---
+            // seed one category
             var category = new SupportCategory { Id = 1, Name = "General" };
             dbContext.SupportCategories.Add(category);
             await dbContext.SaveChangesAsync();
@@ -46,7 +46,7 @@ namespace SupportBookingAPP.Tests.Services
             {
                 UserId = "test-user",
                 EngineerId = 1,
-                SupportCategoryId = category.Id,       // ← assign seeded category
+                SupportCategoryId = category.Id,       
                 SlotStart = DateTime.Now,
                 SlotEnd = DateTime.Now.AddHours(1),
                 IssueDescription = "Test issue"
@@ -77,7 +77,7 @@ namespace SupportBookingAPP.Tests.Services
             dbContext.Engineers.AddRange(engineer1, engineer2);
             dbContext.Users.AddRange(user1, user2);
 
-            // --- New: seed two categories ---
+            // seed two categories
             var cat1 = new SupportCategory { Id = 10, Name = "Hardware" };
             var cat2 = new SupportCategory { Id = 20, Name = "Software" };
             dbContext.SupportCategories.AddRange(cat1, cat2);
@@ -88,7 +88,7 @@ namespace SupportBookingAPP.Tests.Services
                 {
                     UserId = user1.Id,
                     EngineerId = engineer1.Id,
-                    SupportCategoryId = cat1.Id,   // ← assign
+                    SupportCategoryId = cat1.Id,   
                     SlotStart = DateTime.Now,
                     SlotEnd = DateTime.Now.AddHours(1),
                     IssueDescription = "Issue 1"
@@ -97,7 +97,7 @@ namespace SupportBookingAPP.Tests.Services
                 {
                     UserId = user2.Id,
                     EngineerId = engineer2.Id,
-                    SupportCategoryId = cat2.Id,   // ← assign
+                    SupportCategoryId = cat2.Id,   
                     SlotStart = DateTime.Now.AddHours(2),
                     SlotEnd = DateTime.Now.AddHours(3),
                     IssueDescription = "Issue 2"
@@ -133,7 +133,7 @@ namespace SupportBookingAPP.Tests.Services
             dbContext.Engineers.Add(engineer);
             dbContext.Users.Add(user);
 
-            // --- New: seed a category ---
+            // seed a category
             var category = new SupportCategory { Id = 42, Name = "Networking" };
             dbContext.SupportCategories.Add(category);
 
@@ -143,7 +143,7 @@ namespace SupportBookingAPP.Tests.Services
                 Id = 100,
                 UserId = user.Id,
                 EngineerId = engineer.Id,
-                SupportCategoryId = category.Id,   // ← assign
+                SupportCategoryId = category.Id,   
                 SlotStart = DateTime.Now,
                 SlotEnd = DateTime.Now.AddHours(1),
                 IssueDescription = "GetById test booking"
@@ -175,7 +175,7 @@ namespace SupportBookingAPP.Tests.Services
             // Arrange
             var dbContext = GetInMemoryDbContext();
 
-            // --- New: seed at least one category so FK isn't null (InMemory provider may not enforce this, but it's consistent) ---
+            // seed at least one category
             dbContext.SupportCategories.Add(new SupportCategory { Id = 99, Name = "Email" });
 
             // Seed booking with a valid category

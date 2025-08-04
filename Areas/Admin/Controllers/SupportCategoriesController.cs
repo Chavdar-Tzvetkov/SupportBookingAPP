@@ -28,7 +28,7 @@ namespace SupportBookingAPP.Areas.Admin.Controllers
             return View(await _context.SupportCategories.ToListAsync());
         }
 
-        // GET: SupportCategories/Details/5
+        // GET: SupportCategories/Details/
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -67,7 +67,7 @@ namespace SupportBookingAPP.Areas.Admin.Controllers
             return View(supportCategory);
         }
 
-        // GET: SupportCategories/Edit/5
+        // GET: SupportCategories/Edit/
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -83,7 +83,7 @@ namespace SupportBookingAPP.Areas.Admin.Controllers
             return View(supportCategory);
         }
 
-        // POST: SupportCategories/Edit/5
+        // POST: SupportCategories/Edit/
         
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -117,7 +117,7 @@ namespace SupportBookingAPP.Areas.Admin.Controllers
             return View(supportCategory);
         }
 
-        // GET: SupportCategories/Delete/5
+        // GET: SupportCategories/Delete/
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -135,7 +135,7 @@ namespace SupportBookingAPP.Areas.Admin.Controllers
             return View(supportCategory);
         }
 
-        // POST: SupportCategories/Delete/5
+        // POST: SupportCategories/Delete/
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

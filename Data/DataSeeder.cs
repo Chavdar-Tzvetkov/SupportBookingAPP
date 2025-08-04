@@ -17,10 +17,10 @@ namespace SupportBookingAPP.Data
             var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
             var adminSettings = services.GetRequiredService<IOptions<AdminUserSettings>>().Value;
 
-            // === Ensure DB is created ===
+            // Ensure DB is created
             await context.Database.MigrateAsync();
 
-            // === Seed Roles ===
+            // Seed Roles
             string[] roles = { "Admin", "User" };
             foreach (var role in roles)
             {
@@ -28,7 +28,7 @@ namespace SupportBookingAPP.Data
                     await roleManager.CreateAsync(new IdentityRole(role));
             }
 
-            // === Seed Admin ===
+            // Seed Admin
             var adminEmail = adminSettings.Email;
             var adminPassword = adminSettings.Password;
 
@@ -54,7 +54,7 @@ namespace SupportBookingAPP.Data
                     await userManager.AddToRoleAsync(adminUser, "Admin");
             }
 
-            // === Seed Support Categories ===
+            // Seed Support Categories
             if (!context.SupportCategories.Any())
             {
                 var categories = new[]
@@ -69,7 +69,7 @@ namespace SupportBookingAPP.Data
                 await context.SaveChangesAsync();
             }
 
-            // === Seed Engineers ===
+            // Seed Engineers
             if (!context.Engineers.Any())
             {
                 var engineers = new List<Engineer>
@@ -83,7 +83,7 @@ namespace SupportBookingAPP.Data
                 await context.SaveChangesAsync();
             }
 
-            // === Seed Regular Users ===
+            // Seed Regular Users
             for (int i = 1; i <= 10; i++)
             {
                 var email = $"user{i}@softuni.bg";
@@ -103,11 +103,11 @@ namespace SupportBookingAPP.Data
                 }
             }
 
-            // === Ensure Users and Engineers are reloaded ===
+            // Ensure Users and Engineers are reloaded
             var allUsers = await userManager.Users.Where(u => u.Email != adminEmail).ToListAsync();
             var allEngineers = await context.Engineers.ToListAsync();
 
-            // === Seed Bookings ===
+            // Seed Bookings
             if (!context.Bookings.Any() && allUsers.Count > 0 && allEngineers.Count > 0)
             {
                 var rand = new Random();

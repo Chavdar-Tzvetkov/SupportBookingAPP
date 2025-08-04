@@ -64,7 +64,7 @@ namespace SupportBookingAPP.Tests.Services
                 .Returns(Task.CompletedTask);
 
             var services = new ServiceCollection();
-            services.AddSingleton(dbContext); // Register in-memory db
+            services.AddSingleton(dbContext); 
             var provider = services.BuildServiceProvider();
 
             var scopeFactoryMock = new Mock<IServiceScopeFactory>();

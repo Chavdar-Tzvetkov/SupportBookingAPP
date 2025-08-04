@@ -38,7 +38,7 @@ namespace SupportBookingAPP.Tests.Controllers
 
         private IEmailSender GetMockEmailSender()
         {
-            // NOTE: This is the correct (non-generic) interface!
+            
             return Mock.Of<IEmailSender>();
         }
 
@@ -228,7 +228,7 @@ namespace SupportBookingAPP.Tests.Controllers
             var controller = new BookingsController(mockService.Object, mockUserManager.Object);
             controller.ModelState.AddModelError("SlotStart", "Required");
 
-            var booking = new Booking(); // missing required fields
+            var booking = new Booking();
 
             // Act
             var result = await controller.Create(booking);

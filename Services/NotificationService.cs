@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Identity.UI.Services; // This is where IEmailSender comes from
+using Microsoft.AspNetCore.Identity.UI.Services; 
 using SupportBookingAPP.Data;
 using SupportBookingAPP.Models;
 

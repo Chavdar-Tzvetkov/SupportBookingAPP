@@ -47,7 +47,7 @@ namespace SupportBookingAPP.Tests
                 store, null, new PasswordHasher<ApplicationUser>(), null, null, null, null, null, null
             );
 
-            // Manually assign role (since EF doesn’t auto-link roles)
+            
             context.UserRoles.Add(new IdentityUserRole<string>
             {
                 UserId = testUser.Id,
