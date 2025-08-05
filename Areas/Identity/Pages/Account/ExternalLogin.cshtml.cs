@@ -166,7 +166,7 @@ namespace SupportBookingAPP.Areas.Identity.Pages.Account
                         var callbackUrl = Url.Page(
                             "/Account/ConfirmEmail",
                             pageHandler: null,
-                            values: new { area = "Identity", userId = userId, code = code },
+                            values: new { area = "Identity", userId, code },
                             protocol: Request.Scheme);
 
                         await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
@@ -175,7 +175,7 @@ namespace SupportBookingAPP.Areas.Identity.Pages.Account
                         // If account confirmation is required, we need to show the link if we don't have a real email sender
                         if (_userManager.Options.SignIn.RequireConfirmedAccount)
                         {
-                            return RedirectToPage("./RegisterConfirmation", new { Email = Input.Email });
+                            return RedirectToPage("./RegisterConfirmation", new { Input.Email });
                         }
 
                         await _signInManager.SignInAsync(user, isPersistent: false, info.LoginProvider);

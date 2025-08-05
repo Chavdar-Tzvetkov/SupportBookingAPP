@@ -12,7 +12,7 @@ namespace SupportBookingAPP.Tests.Areas.Admin
 {
     public class SupportCategoriesControllerTests
     {
-        private ApplicationDbContext GetDbContext()
+        private static ApplicationDbContext GetDbContext()
         {
             var options = new DbContextOptionsBuilder<ApplicationDbContext>()
                 .UseInMemoryDatabase(Guid.NewGuid().ToString()) // Ensures isolated DB

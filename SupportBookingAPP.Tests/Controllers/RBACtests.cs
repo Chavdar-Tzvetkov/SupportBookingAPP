@@ -18,7 +18,7 @@ namespace SupportBookingAPP.Tests
 {
     public class RBACLogicTests
     {
-        private AdminController CreateAdminControllerWithUserRole(string role)
+        private static AdminController CreateAdminControllerWithUserRole(string role)
         {
             // Set up a unique in-memory database
             var options = new DbContextOptionsBuilder<ApplicationDbContext>()
@@ -57,12 +57,12 @@ namespace SupportBookingAPP.Tests
 
             // Simulate logged-in user with specified role
             var httpContext = new DefaultHttpContext();
-            httpContext.User = new ClaimsPrincipal(new ClaimsIdentity(new[]
-            {
+            httpContext.User = new ClaimsPrincipal(new ClaimsIdentity(
+            [
             new Claim(ClaimTypes.NameIdentifier, testUser.Id),
             new Claim(ClaimTypes.Email, testUser.Email),
             new Claim(ClaimTypes.Role, role)
-            }, "TestAuth"));
+            ], "TestAuth"));
 
             var controller = new AdminController(context, userManager)
             {
@@ -75,7 +75,7 @@ namespace SupportBookingAPP.Tests
             return controller;
         }
 
-        private EngineersController CreateEngineersControllerWithUserRole(string role)
+        private static EngineersController CreateEngineersControllerWithUserRole(string role)
         {
             var options = new DbContextOptionsBuilder<ApplicationDbContext>()
                 .UseInMemoryDatabase(databaseName: $"EngineersTestDb_{Guid.NewGuid()}")
@@ -96,10 +96,10 @@ namespace SupportBookingAPP.Tests
             context.SaveChanges();
 
             var httpContext = new DefaultHttpContext();
-            httpContext.User = new ClaimsPrincipal(new ClaimsIdentity(new[]
-            {
+            httpContext.User = new ClaimsPrincipal(new ClaimsIdentity(
+            [
             new Claim(ClaimTypes.Role, role)
-            }, "TestAuth"));
+            ], "TestAuth"));
 
             var controller = new EngineersController(context)
             {

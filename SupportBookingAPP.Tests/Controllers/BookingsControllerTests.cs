@@ -18,7 +18,7 @@ namespace SupportBookingAPP.Tests.Controllers
 {
     public class BookingsControllerTests
     {
-        private ApplicationDbContext GetDbContext()
+        private static ApplicationDbContext GetDbContext()
         {
             var options = new DbContextOptionsBuilder<ApplicationDbContext>()
                 .UseInMemoryDatabase(Guid.NewGuid().ToString()).Options;
@@ -26,7 +26,7 @@ namespace SupportBookingAPP.Tests.Controllers
             return new ApplicationDbContext(options);
         }
 
-        private UserManager<ApplicationUser> GetMockUserManager(ApplicationUser user)
+        private static UserManager<ApplicationUser> GetMockUserManager(ApplicationUser user)
         {
             var store = new Mock<IUserStore<ApplicationUser>>();
             var mgr = new Mock<UserManager<ApplicationUser>>(store.Object, null, null, null, null, null, null, null, null);
@@ -36,7 +36,7 @@ namespace SupportBookingAPP.Tests.Controllers
             return mgr.Object;
         }
 
-        private IEmailSender GetMockEmailSender()
+        private static IEmailSender GetMockEmailSender()
         {
             
             return Mock.Of<IEmailSender>();
@@ -132,8 +132,8 @@ namespace SupportBookingAPP.Tests.Controllers
 
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.NameIdentifier, currentUser.Id),
-                new Claim(ClaimTypes.Email, currentUser.Email)
+                new(ClaimTypes.NameIdentifier, currentUser.Id),
+                new(ClaimTypes.Email, currentUser.Email)
             };
             var identity = new ClaimsIdentity(claims, "TestAuthType");
             var principal = new ClaimsPrincipal(identity);
@@ -169,10 +169,10 @@ namespace SupportBookingAPP.Tests.Controllers
             {
                 HttpContext = new DefaultHttpContext
                 {
-                    User = new ClaimsPrincipal(new ClaimsIdentity(new[]
-                {
+                    User = new ClaimsPrincipal(new ClaimsIdentity(
+                [
             new Claim(ClaimTypes.NameIdentifier, currentUser.Id)
-        }))
+        ]))
                 }
             };
 
@@ -203,10 +203,10 @@ namespace SupportBookingAPP.Tests.Controllers
             {
                 HttpContext = new DefaultHttpContext
                 {
-                    User = new ClaimsPrincipal(new ClaimsIdentity(new[]
-                {
+                    User = new ClaimsPrincipal(new ClaimsIdentity(
+                [
             new Claim(ClaimTypes.NameIdentifier, currentUser.Id)
-        }))
+        ]))
                 }
             };
 

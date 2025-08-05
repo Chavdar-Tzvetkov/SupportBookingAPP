@@ -18,6 +18,6 @@ namespace SupportBookingAPP.Models
         [Display(Name = "Last Name")]
         public string LastName { get; set; } = string.Empty;
 
-        public ICollection<Booking> Bookings { get; set; } = new List<Booking>();
+        public ICollection<Booking> Bookings { get; set; } = [];
     }
 }

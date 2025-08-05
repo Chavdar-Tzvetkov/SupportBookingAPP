@@ -12,7 +12,7 @@ namespace SupportBookingAPP.Tests.Areas.Admin
 {
     public class EngineersControllerTests
     {
-        private ApplicationDbContext GetDbContext()
+        private static ApplicationDbContext GetDbContext()
         {
             var options = new DbContextOptionsBuilder<ApplicationDbContext>()
                 .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString()) // Unique DB per test

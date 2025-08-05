@@ -34,7 +34,7 @@ namespace SupportBookingAPP.Areas.Admin.Controllers
                 userWithRoles.Add(new UserWithRoles
                 {
                     Email = user.Email,
-                    Roles = roles.ToList()
+                    Roles = [.. roles]
                 });
             }
 

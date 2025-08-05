@@ -64,7 +64,7 @@ namespace SupportBookingAPP.Services
 
         public IEnumerable<SupportCategory> GetAllCategories()
         {
-            return _context.SupportCategories.AsNoTracking().OrderBy(c => c.Name).ToList();
+            return [.. _context.SupportCategories.AsNoTracking().OrderBy(c => c.Name)];
         }
 
         public async Task CreateAsync(Booking booking, ApplicationUser user)

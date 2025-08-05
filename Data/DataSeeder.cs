@@ -21,7 +21,7 @@ namespace SupportBookingAPP.Data
             await context.Database.MigrateAsync();
 
             // Seed Roles
-            string[] roles = { "Admin", "User" };
+            string[] roles = ["Admin", "User"];
             foreach (var role in roles)
             {
                 if (!await roleManager.RoleExistsAsync(role))
@@ -74,9 +74,9 @@ namespace SupportBookingAPP.Data
             {
                 var engineers = new List<Engineer>
                 {
-                    new Engineer { Name = "Ivan Ivanov", Email = "ivan.ivanov@example.com" },
-                    new Engineer { Name = "Maria Petrova", Email = "maria.petrova@example.com" },
-                    new Engineer { Name = "Georgi Dimitrov", Email = "georgi.dimitrov@example.com" }
+                    new() { Name = "Ivan Ivanov", Email = "ivan.ivanov@example.com" },
+                    new() { Name = "Maria Petrova", Email = "maria.petrova@example.com" },
+                    new() { Name = "Georgi Dimitrov", Email = "georgi.dimitrov@example.com" }
                 };
 
                 context.Engineers.AddRange(engineers);

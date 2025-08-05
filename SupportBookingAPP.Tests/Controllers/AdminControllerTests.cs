@@ -20,7 +20,7 @@ namespace SupportBookingAPP.Tests.Areas.Admin
 {
     public class AdminControllerTests
     {
-        private ApplicationDbContext GetInMemoryDb()
+        private static ApplicationDbContext GetInMemoryDb()
         {
             var options = new DbContextOptionsBuilder<ApplicationDbContext>()
                 .UseInMemoryDatabase(Guid.NewGuid().ToString()).Options;
@@ -66,7 +66,7 @@ namespace SupportBookingAPP.Tests.Areas.Admin
 
             mockUserManager.Setup(m => m.Users).Returns(new TestAsyncEnumerable<ApplicationUser>(userList));
             mockUserManager.Setup(m => m.GetRolesAsync(It.IsAny<ApplicationUser>()))
-                           .ReturnsAsync(new List<string> { "Admin" });
+                           .ReturnsAsync(["Admin"]);
 
             var controller = new AdminController(db, mockUserManager.Object);
 

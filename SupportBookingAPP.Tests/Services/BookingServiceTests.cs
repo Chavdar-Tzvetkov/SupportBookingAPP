@@ -14,7 +14,7 @@ namespace SupportBookingAPP.Tests.Services
     public class BookingServiceTests
     {
         // In-memory DB context setup
-        private ApplicationDbContext GetInMemoryDbContext()
+        private static ApplicationDbContext GetInMemoryDbContext()
         {
             var options = new DbContextOptionsBuilder<ApplicationDbContext>()
                 .UseInMemoryDatabase(Guid.NewGuid().ToString())
@@ -23,7 +23,7 @@ namespace SupportBookingAPP.Tests.Services
         }
 
         // Helper method for mocking UserManager
-        private UserManager<ApplicationUser> GetMockUserManager()
+        private static UserManager<ApplicationUser> GetMockUserManager()
         {
             var store = new Mock<IUserStore<ApplicationUser>>();
             return new Mock<UserManager<ApplicationUser>>(store.Object, null, null, null, null, null, null, null, null).Object;

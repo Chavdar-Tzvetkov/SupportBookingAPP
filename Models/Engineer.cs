@@ -27,6 +27,6 @@ namespace SupportBookingAPP.Models
         public DateTime WorkdayEnd { get; set; }
 
         //Navigation property
-        public ICollection<Booking> Bookings { get; set; } = new List<Booking>();
+        public ICollection<Booking> Bookings { get; set; } = [];
     }
 }

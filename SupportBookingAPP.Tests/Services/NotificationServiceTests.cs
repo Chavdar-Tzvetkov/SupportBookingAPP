@@ -14,7 +14,7 @@ namespace SupportBookingAPP.Tests.Services
 {
     public class NotificationServiceTests
     {
-        private ApplicationDbContext GetInMemoryDbContext()
+        private static ApplicationDbContext GetInMemoryDbContext()
         {
             var options = new DbContextOptionsBuilder<ApplicationDbContext>()
                 .UseInMemoryDatabase(Guid.NewGuid().ToString())

@@ -90,7 +90,7 @@ namespace SupportBookingAPP.Areas.Identity.Pages.Account
             // Clear the existing external cookie to ensure a clean login process
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
-            ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            ExternalLogins = [.. (await _signInManager.GetExternalAuthenticationSchemesAsync())];
 
             ReturnUrl = returnUrl;
         }
@@ -99,7 +99,7 @@ namespace SupportBookingAPP.Areas.Identity.Pages.Account
         {
             returnUrl ??= Url.Content("~/");
 
-            ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            ExternalLogins = [.. (await _signInManager.GetExternalAuthenticationSchemesAsync())];
 
             if (ModelState.IsValid)
             {
@@ -113,7 +113,7 @@ namespace SupportBookingAPP.Areas.Identity.Pages.Account
                 }
                 if (result.RequiresTwoFactor)
                 {
-                    return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
+                    return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, Input.RememberMe });
                 }
                 if (result.IsLockedOut)
                 {
