@@ -14,6 +14,7 @@ namespace SupportBookingAPP.Services
         Task CreateAsync(Booking booking, ApplicationUser user);
         Task UpdateAsync(Booking booking);
         Task DeleteAsync(Booking booking);
+        Task MarkAsCompletedAsync(int bookingId);
         bool Exists(int id);
     }
 }

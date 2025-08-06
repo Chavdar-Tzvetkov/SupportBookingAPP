@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SupportBookingAPP.Models
 {
@@ -17,6 +18,11 @@ namespace SupportBookingAPP.Models
         [StringLength(50)]
         [Display(Name = "Last Name")]
         public string LastName { get; set; } = string.Empty;
+
+        public int? EngineerId { get; set; }
+
+        [ForeignKey(nameof(EngineerId))]
+        public Engineer? Engineer { get; set; }
 
         public ICollection<Booking> Bookings { get; set; } = [];
     }

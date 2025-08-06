@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SupportBookingAPP.Data;
 
@@ -11,9 +12,11 @@ using SupportBookingAPP.Data;
 namespace SupportBookingAPP.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250805164011_AddEngineerIdToApplicationUser")]
+    partial class AddEngineerIdToApplicationUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -174,9 +177,6 @@ namespace SupportBookingAPP.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("EngineerId")
-                        .HasColumnType("int");
-
                     b.Property<string>("EquipmentId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -226,8 +226,6 @@ namespace SupportBookingAPP.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EngineerId");
-
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
 
@@ -247,11 +245,14 @@ namespace SupportBookingAPP.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<int>("EngineerId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsCompleted")
-                        .HasColumnType("bit");
+                    b.Property<int?>("EngineerId1")
+                        .HasColumnType("int");
 
                     b.Property<string>("IssueDescription")
                         .IsRequired()
@@ -272,7 +273,11 @@ namespace SupportBookingAPP.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ApplicationUserId");
+
                     b.HasIndex("EngineerId");
+
+                    b.HasIndex("EngineerId1");
 
                     b.HasIndex("SupportCategoryId");
 
@@ -407,23 +412,21 @@ namespace SupportBookingAPP.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("SupportBookingAPP.Models.ApplicationUser", b =>
+            modelBuilder.Entity("SupportBookingAPP.Models.Booking", b =>
                 {
+                    b.HasOne("SupportBookingAPP.Models.ApplicationUser", null)
+                        .WithMany("Bookings")
+                        .HasForeignKey("ApplicationUserId");
+
                     b.HasOne("SupportBookingAPP.Models.Engineer", "Engineer")
                         .WithMany()
                         .HasForeignKey("EngineerId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("Engineer");
-                });
-
-            modelBuilder.Entity("SupportBookingAPP.Models.Booking", b =>
-                {
-                    b.HasOne("SupportBookingAPP.Models.Engineer", "Engineer")
-                        .WithMany("Bookings")
-                        .HasForeignKey("EngineerId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.HasOne("SupportBookingAPP.Models.Engineer", null)
+                        .WithMany("Bookings")
+                        .HasForeignKey("EngineerId1");
 
                     b.HasOne("SupportBookingAPP.Models.SupportCategory", "SupportCategory")
                         .WithMany()
@@ -432,7 +435,7 @@ namespace SupportBookingAPP.Migrations
                         .IsRequired();
 
                     b.HasOne("SupportBookingAPP.Models.ApplicationUser", "User")
-                        .WithMany("Bookings")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict);
 

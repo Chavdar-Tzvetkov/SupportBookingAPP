@@ -26,6 +26,8 @@ namespace SupportBookingAPP.Models
         [StringLength(500, MinimumLength = 10, ErrorMessage = "Issue description must be between 10 and 500 characters.")]
         public string IssueDescription { get; set; }
 
+        public bool IsCompleted { get; set; } = false;
+
         [ValidateNever]
         public ApplicationUser? User { get; set; }
 

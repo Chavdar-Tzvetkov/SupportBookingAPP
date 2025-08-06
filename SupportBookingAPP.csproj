@@ -29,4 +29,8 @@
 		<PackageReference Include="UmbracoCms.Core" Version="8.18.15" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Areas\Engineers\Views\Bookings\" />
+	</ItemGroup>
+
 </Project>

@@ -1,0 +1,59 @@
+﻿@model SupportBookingAPP.Models.Booking
+
+@{
+    ViewData["Title"] = "Create Booking";
+}
+
+<h1 class="mb-4">📅 Create a New Booking</h1>
+<hr />
+
+<div class="row">
+    <div class="col-md-8">
+        <form asp-action="Create" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="mb-3">
+                <label asp-for="EngineerId" class="form-label fw-semibold"></label>
+                <select asp-for="EngineerId" class="form-select" asp-items="ViewBag.EngineerId">
+                    <option value="">-- Select Engineer --</option>
+                </select>
+                <span asp-validation-for="EngineerId" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="SupportCategoryId" class="form-label fw-semibold"></label>
+                <select asp-for="SupportCategoryId" class="form-select" asp-items="ViewBag.SupportCategoryId">
+                    <option value="">-- Select Category --</option>
+                </select>
+                <span asp-validation-for="SupportCategoryId" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="SlotStart" class="form-label fw-semibold"></label>
+                <input asp-for="SlotStart" class="form-control" type="datetime-local" />
+                <span asp-validation-for="SlotStart" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="SlotEnd" class="form-label fw-semibold"></label>
+                <input asp-for="SlotEnd" class="form-control" type="datetime-local" />
+                <span asp-validation-for="SlotEnd" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="IssueDescription" class="form-label fw-semibold"></label>
+                <textarea asp-for="IssueDescription" class="form-control" rows="4"></textarea>
+                <span asp-validation-for="IssueDescription" class="text-danger"></span>
+            </div>
+
+            <div class="mt-4">
+                <button type="submit" class="btn btn-primary me-2">✔ Confirm Booking</button>
+                <a asp-action="Index" class="btn btn-secondary">↩ Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

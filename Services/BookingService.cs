@@ -73,6 +73,15 @@ namespace SupportBookingAPP.Services
             _context.Bookings.Add(booking);
             await _context.SaveChangesAsync();
 
+            _context.Notifications.Add(new Notification
+            {
+                BookingId = booking.Id,
+                Booking = booking,
+                NotifyAt = booking.SlotStart.AddMinutes(-15), // or use any logic you prefer
+                Sent = false
+            });
+            await _context.SaveChangesAsync(); 
+
             var engineer = await _context.Engineers.FindAsync(booking.EngineerId);
             if (engineer != null)
             {
@@ -88,11 +97,36 @@ namespace SupportBookingAPP.Services
         {
             _context.Bookings.Update(booking);
             await _context.SaveChangesAsync();
+            _context.Notifications.Add(new Notification
+            {
+                BookingId = booking.Id,
+                Booking = booking,
+                NotifyAt = booking.SlotStart.AddMinutes(-15),
+                Sent = false
+            });
+            await _context.SaveChangesAsync();
         }
 
         public async Task DeleteAsync(Booking booking)
         {
             _context.Bookings.Remove(booking);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task MarkAsCompletedAsync(int bookingId)
+        {
+            var booking = await _context.Bookings.FindAsync(bookingId);
+            if (booking == null) return;
+
+            booking.IsCompleted = true;
+            _context.Bookings.Update(booking);
+            _context.Notifications.Add(new Notification
+            {
+                BookingId = booking.Id,
+                Booking = booking,
+                NotifyAt = DateTime.UtcNow,
+                Sent = false
+            });
             await _context.SaveChangesAsync();
         }
 

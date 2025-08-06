@@ -20,6 +20,32 @@ namespace SupportBookingAPP.Controllers
             _userManager = userManager;
         }
 
+        // GET: Notifications/EngineerNotifications
+        [Authorize(Roles = "Engineer")]
+        public async Task<IActionResult> EngineerNotifications()
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            // Try to find the Engineer object linked to the current user's email
+            var engineer = await _context.Engineers
+                .FirstOrDefaultAsync(e => e.Email == user.Email);
+
+            if (engineer == null)
+            {
+                return RedirectToAction("Error403", "Error");
+            }
+
+            // Fetch notifications linked to this engineer via booking
+            var notifications = await _context.Notifications
+                .Include(n => n.Booking)
+                    .ThenInclude(b => b.User)
+                .Where(n => n.Booking.EngineerId == engineer.Id)
+                .OrderByDescending(n => n.NotifyAt)
+                .ToListAsync();
+
+            return View("EngineerNotifications", notifications);
+        }
+
         // GET: Notifications
         public async Task<IActionResult> Index()
         {

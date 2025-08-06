@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using SupportBookingAPP.Models;
 
 namespace SupportBookingAPP.Data
@@ -16,12 +17,13 @@ namespace SupportBookingAPP.Data
             var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
             var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
             var adminSettings = services.GetRequiredService<IOptions<AdminUserSettings>>().Value;
+            var config = services.GetRequiredService<IConfiguration>();
 
             // Ensure DB is created
             await context.Database.MigrateAsync();
 
             // Seed Roles
-            string[] roles = ["Admin", "User"];
+            string[] roles = ["Admin", "User", "Engineer"];
             foreach (var role in roles)
             {
                 if (!await roleManager.RoleExistsAsync(role))
@@ -74,13 +76,51 @@ namespace SupportBookingAPP.Data
             {
                 var engineers = new List<Engineer>
                 {
-                    new() { Name = "Ivan Ivanov", Email = "ivan.ivanov@example.com" },
-                    new() { Name = "Maria Petrova", Email = "maria.petrova@example.com" },
-                    new() { Name = "Georgi Dimitrov", Email = "georgi.dimitrov@example.com" }
+                    new() { Name = "Ivan Ivanov", Email = "ivan.ivanov@example.com", Specialty = "Networking", WorkdayStart = DateTime.Today.AddHours(9), WorkdayEnd = DateTime.Today.AddHours(17) },
+                    new() { Name = "Maria Petrova", Email = "maria.petrova@example.com", Specialty = "Hardware", WorkdayStart = DateTime.Today.AddHours(8), WorkdayEnd = DateTime.Today.AddHours(16) },
+                    new() { Name = "Georgi Dimitrov", Email = "georgi.dimitrov@example.com", Specialty = "Software", WorkdayStart = DateTime.Today.AddHours(10), WorkdayEnd = DateTime.Today.AddHours(18) }
                 };
 
                 context.Engineers.AddRange(engineers);
                 await context.SaveChangesAsync();
+            }
+
+            // Seed Engineer Identity Users
+            var engineerAccounts = config.GetSection("EngineerAccounts").Get<Dictionary<string, string>>();
+            var engineersFromDb = await context.Engineers.ToListAsync();
+
+            if (engineerAccounts != null)
+            {
+                foreach (var kvp in engineerAccounts)
+                {
+                    var email = kvp.Key;
+                    var password = kvp.Value;
+
+                    var existingUser = await userManager.FindByEmailAsync(email);
+                    if (existingUser != null)
+                        continue;
+
+                    var engineer = engineersFromDb.FirstOrDefault(e => e.Email == email);
+                    if (engineer == null)
+                        continue; 
+
+                    var user = new ApplicationUser
+                    {
+                        UserName = email,
+                        Email = email,
+                        EmailConfirmed = true,
+                        FirstName = engineer.Name.Split(' ')[0],
+                        LastName = engineer.Name.Split(' ').Last(),
+                        EngineerId = engineer.Id
+                    };
+
+                    var result = await userManager.CreateAsync(user, password);
+                    if (result.Succeeded)
+                    {
+                        await userManager.AddToRoleAsync(user, "Engineer");
+                    }
+                   
+                }
             }
 
             // Seed Regular Users
@@ -113,7 +153,7 @@ namespace SupportBookingAPP.Data
                 var rand = new Random();
                 var bookings = new List<Booking>();
 
-                var defaultCategory = context.SupportCategories.First(); 
+                var defaultCategory = context.SupportCategories.First();
 
                 for (int i = 0; i < 12; i++)
                 {
@@ -130,10 +170,9 @@ namespace SupportBookingAPP.Data
                         SlotStart = slotStart,
                         SlotEnd = slotEnd,
                         IssueDescription = $"Auto-generated issue #{i + 1}",
-                        SupportCategoryId = defaultCategory.Id 
+                        SupportCategoryId = defaultCategory.Id
                     });
                 }
-
 
                 context.Bookings.AddRange(bookings);
                 await context.SaveChangesAsync();

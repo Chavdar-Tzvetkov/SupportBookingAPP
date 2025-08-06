@@ -23,6 +23,7 @@
             <th>Category</th>
             <th>User</th>
             <th>Engineer</th>
+            <th>Status</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -32,7 +33,7 @@
             var isOwner = item.UserId == currentUser?.Id;
             var isEngineer = item.Engineer?.Email == currentUser?.Email;
 
-            <tr>
+            <tr class="@(item.IsCompleted ? "table-success" : "")">
                 <td>@item.SlotStart.ToString("g")</td>
                 <td>@item.SlotEnd.ToString("g")</td>
                 <td>@item.IssueDescription</td>
@@ -40,12 +41,32 @@
                 <td>@item.User?.Email</td>
                 <td>@item.Engineer?.Name</td>
                 <td>
+                    @if (item.IsCompleted)
+                    {
+                        <span class="badge bg-success">Completed</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-warning text-dark">Pending</span>
+                    }
+                </td>
+                <td>
                     @if (isAdmin || isEngineer || isOwner)
                     {
                         <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-primary">Edit</a>
                         <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a>
                     }
                     <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-secondary">Details</a>
+
+                    @* Show 'Complete' button only for engineer if booking is not done *@
+                    @if (isEngineer && !item.IsCompleted)
+                    {
+                        <form asp-action="MarkAsCompleted" asp-route-id="@item.Id" method="post" class="d-inline">
+                            <button type="submit" class="btn btn-sm btn-success" title="Mark as completed">
+                                ✔ Complete
+                            </button>
+                        </form>
+                    }
                 </td>
             </tr>
         }

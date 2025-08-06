@@ -1,0 +1,26 @@
+﻿@model IEnumerable<SupportBookingAPP.Models.Engineer>
+
+<h4>👷 Engineers</h4>
+<table class="table table-bordered table-hover table-striped">
+    <thead class="table-light">
+        <tr>
+            <th>Name</th>
+            <th>Specialty</th>
+            <th>Working Hours</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var eng in Model)
+        {
+            <tr>
+                <td>@eng.Name</td>
+                <td>@(!string.IsNullOrWhiteSpace(eng.Specialty) ? eng.Specialty : "—")</td>
+                <td>
+                    @(eng.WorkdayStart != default ? eng.WorkdayStart.ToShortTimeString() : "--")
+                    -
+                    @(eng.WorkdayEnd != default ? eng.WorkdayEnd.ToShortTimeString() : "--")
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,30 @@
+﻿@model SupportBookingAPP.Models.Engineer
+
+@{
+    ViewData["Title"] = "Delete Engineer";
+}
+
+<h1 class="mb-4 text-danger">Delete Engineer</h1>
+
+<h5>Are you sure you want to delete the following profile?</h5>
+<hr />
+
+<dl class="row mb-4">
+    <dt class="col-sm-3">Name</dt>
+    <dd class="col-sm-9">@Model.Name</dd>
+
+    <dt class="col-sm-3">Specialty</dt>
+    <dd class="col-sm-9">@Model.Specialty</dd>
+
+    <dt class="col-sm-3">Workday Start</dt>
+    <dd class="col-sm-9">@Model.WorkdayStart.ToString("hh\\:mm")</dd>
+
+    <dt class="col-sm-3">Workday End</dt>
+    <dd class="col-sm-9">@Model.WorkdayEnd.ToString("hh\\:mm")</dd>
+</dl>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger me-2">🗑 Confirm Delete</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>

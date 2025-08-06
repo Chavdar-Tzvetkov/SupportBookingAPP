@@ -139,5 +139,40 @@ namespace SupportBookingAPP.Controllers
             await _bookingService.DeleteAsync(booking);
             return RedirectToAction(nameof(Index));
         }
+
+        public async Task<IActionResult> MarkAsCompleted(int? id)
+        {
+            if (id == null) return RedirectToAction("Error404", "Error");
+
+            var booking = await _bookingService.GetByIdAsync(id.Value);
+            if (booking == null) return RedirectToAction("Error404", "Error");
+
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null || !await _bookingService.UserCanAccessBooking(user, booking))
+                return Forbid();
+
+            if (booking.IsCompleted)
+                return RedirectToAction(nameof(Index)); 
+
+            return View(booking);
+        }
+
+        [HttpPost, ActionName("MarkAsCompleted")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> MarkAsCompletedConfirmed(int id)
+        {
+            var booking = await _bookingService.GetByIdAsync(id);
+            if (booking == null) return RedirectToAction("Error404", "Error");
+
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null || !await _bookingService.UserCanAccessBooking(user, booking))
+                return Forbid();
+
+            if (!booking.IsCompleted)
+                await _bookingService.MarkAsCompletedAsync(id);
+
+            return RedirectToAction(nameof(Index));
+        }
+
     }
 }

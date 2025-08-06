@@ -20,18 +20,28 @@ namespace SupportBookingAPP.Data
         {
             base.OnModelCreating(builder);
 
-            // Fluent API relationship configs
+            // Booking → Engineer 
             builder.Entity<Booking>()
                 .HasOne(b => b.Engineer)
-                .WithMany()
+                .WithMany(e => e.Bookings)
                 .HasForeignKey(b => b.EngineerId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            // Booking → ApplicationUser
             builder.Entity<Booking>()
                 .HasOne(b => b.User)
-                .WithMany()
+                .WithMany(u => u.Bookings)
                 .HasForeignKey(b => b.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            // ApplicationUser → Engineer 
+            builder.Entity<ApplicationUser>()
+                .HasOne(u => u.Engineer)
+                .WithMany() // no reverse navigation
+                .HasForeignKey(u => u.EngineerId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
+
     }
+
 }
